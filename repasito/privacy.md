@@ -45,6 +45,10 @@ Repasito has no sign-up, no login and no password. On first launch the app creat
 **anonymous session**, which is a random identifier used to keep your scan count and your
 subscription status attached to your installation.
 
+On iPhone, a copy of the session's renewal token is kept in the iOS Keychain on your phone,
+which iOS keeps when an app is deleted. If you reinstall Repasito, the app continues the same
+anonymous session, so your Repasito ID, your pages and your subscription stay attached.
+
 We never ask for, and never receive, your name, your email address or your phone number.
 
 ---

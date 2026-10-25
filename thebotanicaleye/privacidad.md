@@ -29,6 +29,17 @@ La app no tiene registro, ni inicio de sesión, ni contraseña. La primera vez q
 un **identificador aleatorio** para tu instalación (un UUID). Sus ocho primeros caracteres
 aparecen en **Perfil › Tu ID**, por ejemplo `3FA8-5F64`.
 
+El identificador se mantiene si borras y vuelves a instalar la app, para que no pierdas tu
+Premium o tu acceso gratuito:
+
+- **iPhone:** se guarda una copia del identificador en el llavero (Keychain) de iOS de tu
+  teléfono, que iOS conserva al borrar una app.
+- **Android:** en una instalación nueva, el identificador se calcula a partir del identificador
+  de dispositivo propio de la app que da Android (ANDROID_ID). Solo se usa un resumen
+  criptográfico de un solo sentido: el identificador del dispositivo nunca se nos envía y no se
+  puede obtener a partir del identificador de la app. Solo cambia tras restablecer el teléfono
+  de fábrica.
+
 Nunca te pedimos ni recibimos tu email ni tu teléfono.
 
 ---

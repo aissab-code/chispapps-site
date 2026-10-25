@@ -29,6 +29,15 @@ The app has no sign-up, no login and no password. On first launch it creates a *
 identifier** for your installation (a UUID). Its first eight characters are shown in the app
 under **Profile › Your ID**, for example `3FA8-5F64`.
 
+The identifier stays the same if you delete and reinstall the app, so your Premium or free
+access is not lost:
+
+- **iPhone:** a copy of the identifier is kept in the iOS Keychain on your phone, which iOS
+  keeps when an app is deleted.
+- **Android:** on a new installation the identifier is calculated from Android's app-specific
+  device ID (ANDROID_ID). Only a one-way hash of it is used: the device ID itself is never sent
+  to us, and it cannot be recovered from the identifier. It changes only after a factory reset.
+
 We never ask for, and never receive, your email address or phone number.
 
 ---

@@ -46,6 +46,11 @@ Repasito no tiene registro, ni inicio de sesión, ni contraseña. Al abrirla por
 se crea una **sesión anónima**: un identificador aleatorio que sirve para asociar tu
 contador de páginas y tu suscripción a esta instalación.
 
+En iPhone, se guarda una copia del token de renovación de esa sesión en el llavero (Keychain)
+de iOS de tu teléfono, que iOS conserva al borrar una app. Si vuelves a instalar Repasito, la
+app continúa la misma sesión anónima, de modo que tu ID de Repasito, tus páginas y tu
+suscripción siguen asociados.
+
 Nunca te pedimos —ni recibimos— tu nombre, tu correo electrónico ni tu teléfono.
 
 ---
