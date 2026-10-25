@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The secret link lives in the URL; never leak it to other sites or to search engines. -->
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Panel de colaborador · Repasito</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="brand"><div class="logo">R</div><span>Repasito · Colaboradores</span></header>
+
+  <div id="state" class="msg">Cargando tu panel…</div>
+
+  <div id="panel" hidden>
+    <h1 id="hello"></h1>
+    <p class="lead">Así va tu código. Las cifras se actualizan cada vez que alguien paga o se suscribe.</p>
+
+    <section class="card">
+      <h3 style="margin-top:0">Tu código</h3>
+      <div class="code-row">
+        <span class="code" id="code"></span>
+        <button class="secondary" id="copy-code">Copiar código</button>
+      </div>
+      <p style="margin-top:14px"><strong>1 mes gratis</strong> de Repasito Plus para quien se suscriba por primera vez con él.</p>
+      <h3>Enlace para iPhone</h3>
+      <p class="link"><a id="apple-url" target="_blank" rel="noopener noreferrer"></a></p>
+      <button class="secondary" id="copy-url">Copiar enlace</button>
+      <p class="muted" style="margin-top:12px">Ponlo en tu biografía: abre el canje de Apple con tu código ya escrito. Android, muy pronto.</p>
+    </section>
+
+    <h2>Resultados</h2>
+    <div class="grid">
+      <div class="card stat"><div class="n" id="referred">0</div><div class="l">han usado tu código</div></div>
+      <div class="card stat"><div class="n" id="paying">0</div><div class="l">ya pagan su suscripción</div></div>
+    </div>
+
+    <h2>Tus comisiones</h2>
+    <div id="balances" class="grid"></div>
+    <p class="muted" style="margin-top:12px">
+      <strong>En retención:</strong> esperan 30 días por si hay devoluciones.
+      <strong>Lista para pagar:</strong> se transfiere a final de mes desde 10 €.
+    </p>
+
+    <h2>Movimientos recientes</h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Fecha</th><th>Plan</th><th class="num">Comisión</th><th>Estado</th></tr></thead>
+        <tbody id="recent"></tbody>
+      </table>
+      <p id="recent-empty" class="muted" hidden style="margin:12px 0 0">Aún no hay movimientos. El primero aparece cuando alguien pague tras su mes gratis.</p>
+    </div>
+
+    <h2>Pagos recibidos</h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th>Fecha</th><th>Referencia</th><th class="num">Importe</th></tr></thead>
+        <tbody id="payouts"></tbody>
+      </table>
+      <p id="payouts-empty" class="muted" hidden style="margin:12px 0 0">Todavía no hay pagos.</p>
+    </div>
+
+    <h2>Cómo se calcula</h2>
+    <p>Ganas el <strong id="rate"></strong> de lo que Repasito ingresa de verdad —una vez descontados el IVA y la comisión de Apple o Google— por cada periodo que paguen las personas que usaron tu código, durante sus primeros <strong id="months"></strong> meses. El mes gratis no genera comisión.</p>
+    <p><a href="condiciones.html">Condiciones completas del programa</a></p>
+  </div>
+
+  <footer>Este enlace es solo para ti: no lo compartas. ¿Dudas? <a href="mailto:aissa.b.code@gmail.com">aissa.b.code@gmail.com</a></footer>
+</main>
+
+<script>
+  // Public by design: this is the same key the app ships with. The dashboard function only
+  // answers to a valid secret token and never returns who a referral is.
+  const SUPABASE_URL = 'https://jbucdxgdgzescpdukfmw.supabase.co';
+  const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidWNkeGdkZ3plc2NwZHVrZm13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MjYyNDAsImV4cCI6MjA5MDIwMjI0MH0.L17-Q6cUPMRlkFHSxq3bC1uqImmMjvLhsejnRn_NEfI';
+
+  const $ = (id) => document.getElementById(id);
+  const money = (n, cur) => new Intl.NumberFormat('es-ES', { style: 'currency', currency: cur || 'EUR' }).format(Number(n) || 0);
+  const day = (d) => new Date(d).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+  const PLAN = { monthly: 'Mensual', yearly: 'Anual' };
+  const STATUS = { pending: 'En retención', payable: 'Lista para pagar', paid: 'Pagada', reversal: 'Devolución' };
+
+  function show(message, isError) {
+    $('state').textContent = message;
+    $('state').className = 'msg' + (isError ? ' error' : '');
+    $('state').hidden = false;
+  }
+
+  function cell(text, cls) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    td.textContent = text;
+    return td;
+  }
+
+  function copy(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+      const label = button.textContent;
+      button.textContent = 'Copiado';
+      setTimeout(() => { button.textContent = label; }, 1500);
+    });
+  }
+
+  function render(d) {
+    $('hello').textContent = 'Hola, ' + d.display_name;
+    $('code').textContent = d.code;
+    $('apple-url').href = d.apple_redeem_url;
+    $('apple-url').textContent = d.apple_redeem_url;
+    $('copy-code').onclick = () => copy(d.code, $('copy-code'));
+    $('copy-url').onclick = () => copy(d.apple_redeem_url, $('copy-url'));
+    $('referred').textContent = d.referred_users;
+    $('paying').textContent = d.paying_users;
+    $('rate').textContent = Math.round(Number(d.commission_rate) * 100) + ' %';
+    $('months').textContent = d.commission_months;
+
+    const balances = d.balances.length ? d.balances : [{ currency: 'EUR', pending: 0, payable: 0, paid: 0 }];
+    $('balances').replaceChildren(...balances.flatMap((b) => [
+      ['En retención', b.pending], ['Lista para pagar', b.payable], ['Pagada', b.paid],
+    ].map(([label, value]) => {
+      const card = document.createElement('div');
+      card.className = 'card stat';
+      card.innerHTML = '<div class="n"></div><div class="l"></div>';
+      card.querySelector('.n').textContent = money(value, b.currency);
+      card.querySelector('.l').textContent = label + (balances.length > 1 ? ' · ' + b.currency : '');
+      return card;
+    })));
+
+    $('recent').replaceChildren(...d.recent.map((r) => {
+      const tr = document.createElement('tr');
+      const pill = document.createElement('span');
+      pill.className = 'pill ' + r.status;
+      pill.textContent = STATUS[r.status] || r.status;
+      const status = document.createElement('td');
+      status.append(pill);
+      tr.append(cell(day(r.event_at)), cell(PLAN[r.product_id] || r.product_id || '—'),
+        cell(money(r.commission_amount, r.currency), 'num'), status);
+      return tr;
+    }));
+    $('recent-empty').hidden = d.recent.length > 0;
+
+    $('payouts').replaceChildren(...d.payouts.map((p) => {
+      const tr = document.createElement('tr');
+      tr.append(cell(day(p.paid_on)), cell(p.reference || '—'), cell(money(p.amount, p.currency), 'num'));
+      return tr;
+    }));
+    $('payouts-empty').hidden = d.payouts.length > 0;
+
+    $('state').hidden = true;
+    $('panel').hidden = false;
+  }
+
+  (async () => {
+    const token = new URLSearchParams(location.hash.slice(1)).get('k');
+    if (!token) {
+      show('Abre el enlace privado que te enviamos: tu panel va incluido en él.', true);
+      return;
+    }
+    try {
+      const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/affiliate_dashboard', {
+        method: 'POST',
+        headers: { apikey: ANON_KEY, Authorization: 'Bearer ' + ANON_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ p_token: token }),
+      });
+      const data = res.ok ? await res.json() : null;
+      if (!data) {
+        show('Este enlace no es válido o ha caducado. Escríbenos y te mandamos uno nuevo.', true);
+        return;
+      }
+      render(data);
+    } catch (e) {
+      show('No hemos podido cargar tu panel. Comprueba tu conexión e inténtalo de nuevo.', true);
+    }
+  })();
+</script>
+</body>
+</html>

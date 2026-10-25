@@ -1,0 +1,12 @@
+title: Chispapps
+description: Chispapps builds quality mobile apps that add real value.
+theme: jekyll-theme-primer
+lang: en
+url: https://chispapps.com
+exclude:
+  - README.md
+defaults:
+  - scope:
+      path: "repasito"
+    values:
+      lang: es

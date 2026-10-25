@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The secret link lives in the URL; never leak it to other sites or to search engines. -->
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>The Botanical Eye · Partners</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="brand">
+    <div class="logo" aria-hidden="true">🌿</div><span>The Botanical Eye · <span data-t="partners"></span></span>
+    <a class="lang" id="lang-switch" href="#"></a>
+  </header>
+
+  <div id="state" class="msg"></div>
+
+  <div id="panel" hidden>
+    <h1 id="hello"></h1>
+    <p class="lead" data-t="lead"></p>
+
+    <section class="card">
+      <h3 style="margin-top:0" data-t="yourCode"></h3>
+      <div class="code-row">
+        <span class="code" id="code"></span>
+        <button class="secondary" id="copy-code" data-t="copyCode"></button>
+      </div>
+      <p style="margin-top:14px" data-t="codeGives" data-html></p>
+
+      <h3>iPhone</h3>
+      <div id="apple-block">
+        <p class="link"><a id="apple-url" target="_blank" rel="noopener noreferrer"></a></p>
+        <button class="secondary" id="copy-apple" data-t="copyLink"></button>
+      </div>
+      <p id="apple-soon" class="muted" data-t="soon" hidden></p>
+
+      <h3>Android</h3>
+      <div id="android-block">
+        <p class="link"><a id="android-url" target="_blank" rel="noopener noreferrer"></a></p>
+        <button class="secondary" id="copy-android" data-t="copyLink"></button>
+      </div>
+      <p id="android-soon" class="muted" data-t="soon" hidden></p>
+
+      <p class="muted" style="margin-top:12px" data-t="bioHint"></p>
+    </section>
+
+    <h2 data-t="results"></h2>
+    <div class="grid">
+      <div class="card stat"><div class="n" id="referred">0</div><div class="l" data-t="usedCode"></div></div>
+      <div class="card stat"><div class="n" id="paying">0</div><div class="l" data-t="paying"></div></div>
+    </div>
+
+    <h2 data-t="commissions"></h2>
+    <div id="balances" class="grid"></div>
+    <p class="muted" style="margin-top:12px" data-t="holdNote" data-html></p>
+
+    <h2 data-t="recentTitle"></h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th data-t="date"></th><th data-t="plan"></th><th class="num" data-t="commission"></th><th data-t="status"></th></tr></thead>
+        <tbody id="recent"></tbody>
+      </table>
+      <p id="recent-empty" class="muted" hidden style="margin:12px 0 0" data-t="recentEmpty"></p>
+    </div>
+
+    <h2 data-t="payoutsTitle"></h2>
+    <div class="card table-wrap">
+      <table>
+        <thead><tr><th data-t="date"></th><th data-t="reference"></th><th class="num" data-t="amount"></th></tr></thead>
+        <tbody id="payouts"></tbody>
+      </table>
+      <p id="payouts-empty" class="muted" hidden style="margin:12px 0 0" data-t="payoutsEmpty"></p>
+    </div>
+
+    <h2 data-t="howTitle"></h2>
+    <p id="how"></p>
+    <p><a id="terms-link"></a></p>
+  </div>
+
+  <footer><span data-t="private"></span> <a href="mailto:aissa.b.code@gmail.com">aissa.b.code@gmail.com</a></footer>
+</main>
+
+<script src="config.js"></script>
+<script>
+  const T = {
+    es: {
+      partners: 'Colaboradores', switchTo: 'English', loading: 'Cargando tu panel…',
+      hello: 'Hola, {name}', lead: 'Así va tu código. Las cifras se actualizan cada vez que alguien paga o se suscribe.',
+      yourCode: 'Tu código', copyCode: 'Copiar código', copyLink: 'Copiar enlace', copied: 'Copiado',
+      codeGives: '<strong>1 mes gratis</strong> de Premium para quien se suscriba por primera vez con él.',
+      soon: 'Muy pronto.', bioHint: 'Pon el enlace en tu biografía: abre el canje de la tienda con tu código ya escrito.',
+      results: 'Resultados', usedCode: 'han usado tu código', paying: 'ya pagan',
+      commissions: 'Tus comisiones', pending: 'En retención', payable: 'Lista para pagar', paid: 'Pagada', reversal: 'Devolución',
+      holdNote: '<strong>En retención:</strong> espera 30 días por si hay devoluciones. <strong>Lista para pagar:</strong> se transfiere a final de mes desde 20 €.',
+      recentTitle: 'Movimientos recientes', date: 'Fecha', plan: 'Plan', commission: 'Comisión', status: 'Estado',
+      recentEmpty: 'Aún no hay movimientos. El primero aparece cuando alguien pague tras su mes gratis.',
+      payoutsTitle: 'Pagos recibidos', reference: 'Referencia', amount: 'Importe', payoutsEmpty: 'Todavía no hay pagos.',
+      monthly: 'Mensual', yearly: 'Anual',
+      howTitle: 'Cómo se calcula',
+      how: 'Ganas el {rate} de lo que la app ingresa de verdad —una vez descontados el IVA y la comisión de Apple o Google— por cada periodo que paguen las personas que usaron tu código, durante sus primeros {months} meses. El mes gratis no genera comisión.',
+      terms: 'Condiciones completas del programa', termsHref: 'condiciones.html',
+      private: 'Este enlace es solo para ti: no lo compartas. ¿Dudas?',
+      noToken: 'Abre el enlace privado que te enviamos: tu panel va incluido en él.',
+      invalid: 'Este enlace no es válido o ha caducado. Escríbenos y te mandamos uno nuevo.',
+      offline: 'No hemos podido cargar tu panel. Comprueba tu conexión e inténtalo de nuevo.',
+      locale: 'es-ES',
+    },
+    en: {
+      partners: 'Partners', switchTo: 'Español', loading: 'Loading your dashboard…',
+      hello: 'Hi, {name}', lead: 'This is how your code is doing. Figures update whenever someone subscribes or pays.',
+      yourCode: 'Your code', copyCode: 'Copy code', copyLink: 'Copy link', copied: 'Copied',
+      codeGives: '<strong>1 month of Premium free</strong> for anyone subscribing for the first time with it.',
+      soon: 'Coming soon.', bioHint: 'Put the link in your bio: it opens the store\'s redemption with your code already filled in.',
+      results: 'Results', usedCode: 'used your code', paying: 'are paying',
+      commissions: 'Your commissions', pending: 'On hold', payable: 'Ready to pay', paid: 'Paid', reversal: 'Refund',
+      holdNote: '<strong>On hold:</strong> waits 30 days in case of refunds. <strong>Ready to pay:</strong> transferred at the end of the month from €20.',
+      recentTitle: 'Recent activity', date: 'Date', plan: 'Plan', commission: 'Commission', status: 'Status',
+      recentEmpty: 'Nothing yet. The first entry appears when someone pays after their free month.',
+      payoutsTitle: 'Payouts received', reference: 'Reference', amount: 'Amount', payoutsEmpty: 'No payouts yet.',
+      monthly: 'Monthly', yearly: 'Yearly',
+      howTitle: 'How it is calculated',
+      how: 'You earn {rate} of what the app actually receives — after VAT and Apple\'s or Google\'s commission — for every period paid by people who used your code, during their first {months} months. The free month earns nothing.',
+      terms: 'Full programme terms', termsHref: 'terms.html',
+      private: 'This link is just for you: do not share it. Questions?',
+      noToken: 'Open the private link we sent you: your dashboard is built into it.',
+      invalid: 'This link is not valid or has expired. Write to us and we will send you a new one.',
+      offline: 'We could not load your dashboard. Check your connection and try again.',
+      locale: 'en-GB',
+    },
+  };
+
+  const $ = (id) => document.getElementById(id);
+  const params = new URLSearchParams(location.search);
+  let lang = params.get('lang') || ((navigator.language || '').toLowerCase().startsWith('es') ? 'es' : 'en');
+  if (!T[lang]) lang = 'en';
+  let data = null;
+  const t = (k) => T[lang][k];
+
+  function applyStatic() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-t]').forEach((el) => {
+      const v = t(el.dataset.t);
+      if (el.hasAttribute('data-html')) el.innerHTML = v; else el.textContent = v;
+    });
+    $('lang-switch').textContent = t('switchTo');
+    $('terms-link').textContent = t('terms');
+    $('terms-link').href = t('termsHref');
+  }
+
+  $('lang-switch').addEventListener('click', (e) => {
+    e.preventDefault();
+    lang = lang === 'es' ? 'en' : 'es';
+    applyStatic();
+    if (data) render(data);
+  });
+
+  function show(key, isError) {
+    $('state').textContent = t(key);
+    $('state').className = 'msg' + (isError ? ' error' : '');
+    $('state').hidden = false;
+  }
+
+  const money = (n, cur) => new Intl.NumberFormat(t('locale'), { style: 'currency', currency: cur || 'EUR' }).format(Number(n) || 0);
+  const day = (d) => new Date(d).toLocaleDateString(t('locale'), { day: 'numeric', month: 'short', year: 'numeric' });
+  const plan = (id) => /year|annual/i.test(id || '') ? t('yearly') : /month/i.test(id || '') ? t('monthly') : (id || '—');
+
+  function cell(text, cls) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    td.textContent = text;
+    return td;
+  }
+
+  function copy(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+      button.textContent = t('copied');
+      setTimeout(() => { button.textContent = t(button.dataset.t); }, 1500);
+    });
+  }
+
+  function storeLink(prefix, url) {
+    $(prefix + '-block').hidden = !url;
+    $(prefix + '-soon').hidden = !!url;
+    if (!url) return;
+    $(prefix + '-url').href = url;
+    $(prefix + '-url').textContent = url;
+    $('copy-' + prefix).onclick = () => copy(url, $('copy-' + prefix));
+  }
+
+  function render(d) {
+    $('hello').textContent = t('hello').replace('{name}', d.display_name);
+    $('code').textContent = d.code;
+    $('copy-code').onclick = () => copy(d.code, $('copy-code'));
+    storeLink('apple', d.apple_redeem_url);
+    storeLink('android', d.android_redeem_url);
+    $('referred').textContent = d.referred_users;
+    $('paying').textContent = d.paying_users;
+    $('how').textContent = t('how')
+      .replace('{rate}', Math.round(Number(d.commission_rate) * 100) + ' %')
+      .replace('{months}', d.commission_months);
+
+    const balances = d.balances.length ? d.balances : [{ currency: 'EUR', pending: 0, payable: 0, paid: 0 }];
+    $('balances').replaceChildren(...balances.flatMap((b) => [
+      ['pending', b.pending], ['payable', b.payable], ['paid', b.paid],
+    ].map(([key, value]) => {
+      const card = document.createElement('div');
+      card.className = 'card stat';
+      card.innerHTML = '<div class="n"></div><div class="l"></div>';
+      card.querySelector('.n').textContent = money(value, b.currency);
+      card.querySelector('.l').textContent = t(key) + (balances.length > 1 ? ' · ' + b.currency : '');
+      return card;
+    })));
+
+    $('recent').replaceChildren(...d.recent.map((r) => {
+      const tr = document.createElement('tr');
+      const pill = document.createElement('span');
+      pill.className = 'pill ' + r.status;
+      pill.textContent = t(r.status) || r.status;
+      const status = document.createElement('td');
+      status.append(pill);
+      tr.append(cell(day(r.event_at)), cell(plan(r.product_id)), cell(money(r.commission_amount, r.currency), 'num'), status);
+      return tr;
+    }));
+    $('recent-empty').hidden = d.recent.length > 0;
+
+    $('payouts').replaceChildren(...d.payouts.map((p) => {
+      const tr = document.createElement('tr');
+      tr.append(cell(day(p.paid_on)), cell(p.reference || '—'), cell(money(p.amount, p.currency), 'num'));
+      return tr;
+    }));
+    $('payouts-empty').hidden = d.payouts.length > 0;
+
+    $('state').hidden = true;
+    $('panel').hidden = false;
+  }
+
+  applyStatic();
+  show('loading');
+  (async () => {
+    const token = new URLSearchParams(location.hash.slice(1)).get('k');
+    if (!token) { show('noToken', true); return; }
+    try {
+      data = await window.beRpc('affiliate_dashboard', { p_token: token });
+      if (!data) { show('invalid', true); return; }
+      render(data);
+    } catch (e) {
+      show(e.status ? 'invalid' : 'offline', true);
+    }
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Partner programme · The Botanical Eye</title>
+  <meta name="description" content="Recommend The Botanical Eye: your followers get 1 month of Premium free and you earn 20% during their first year.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="brand">
+    <div class="logo" aria-hidden="true">🌿</div><span>The Botanical Eye · Partners</span>
+    <a class="lang" href="unete.html" hreflang="es">Español</a>
+  </header>
+
+  <h1>Recommend The Botanical Eye and earn 20%</h1>
+  <p class="lead">The Botanical Eye identifies plants from a photo, checks their health and reminds you when to water, feed and repot them. If your community grows plants, it is a good fit.</p>
+
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li><div><strong>You get your own code</strong><br><span class="muted">For example, LAURA. The same on iPhone and Android.</span></div></li>
+    <li><div><strong>Your followers get 1 month free</strong><br><span class="muted">Of Premium, when they subscribe for the first time with your code.</span></div></li>
+    <li><div><strong>You earn 20% during their first year</strong><br><span class="muted">Of what they pay after the free month, on what the app actually receives. You see it all on your private dashboard.</span></div></li>
+  </ol>
+
+  <h2>Apply</h2>
+  <div class="card">
+    <form id="apply" novalidate>
+      <label>Name
+        <input name="name" autocomplete="name" required minlength="2" maxlength="100">
+      </label>
+      <label>Email
+        <input name="email" type="email" autocomplete="email" required maxlength="200">
+      </label>
+      <label>Your profile
+        <input name="handle" required minlength="2" maxlength="100" placeholder="@yourhandle or link">
+      </label>
+      <label>Main platform
+        <select name="platform" required>
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+          <option value="youtube">YouTube</option>
+          <option value="blog">Blog or website</option>
+          <option value="other">Other</option>
+        </select>
+      </label>
+      <label>Approximate followers
+        <input name="followers" type="number" inputmode="numeric" min="0" step="1">
+      </label>
+      <label>The code you would like <span class="muted">(optional)</span>
+        <input name="code" maxlength="20" pattern="[A-Za-z0-9]{3,20}" autocapitalize="characters" placeholder="LAURA" style="text-transform:uppercase">
+        <small>3 to 20 letters or digits, no spaces. We use it if it is free.</small>
+      </label>
+      <label>Tell us about your community <span class="muted">(optional)</span>
+        <textarea name="message" maxlength="2000"></textarea>
+      </label>
+      <!-- Bots fill every field; people never see this one. -->
+      <div class="hp" aria-hidden="true"><label>Website <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label class="check">
+        <input name="consent" type="checkbox" required>
+        <span>I have read the data protection information below and agree to be contacted about the programme. I accept the <a href="terms.html" target="_blank">programme terms</a>.</span>
+      </label>
+      <button type="submit" id="send">Send application</button>
+      <div id="result" class="msg" hidden></div>
+    </form>
+  </div>
+
+  <h2>Data protection</h2>
+  <dl class="legal">
+    <dt>Controller</dt><dd>Aissa Bamogo Redondo (sole trader, Spain) · aissa.b.code@gmail.com</dd>
+    <dt>Purpose</dt><dd>Reviewing your application to the partner programme and contacting you about it.</dd>
+    <dt>Legal basis</dt><dd>Your consent, which you can withdraw at any time.</dd>
+    <dt>Recipients</dt><dd>We do not share your data. Supabase hosts the database as our processor.</dd>
+    <dt>Retention</dt><dd>If the application does not go ahead, we delete it within 12 months.</dd>
+    <dt>Your rights</dt><dd>Access, rectification, erasure, objection, restriction and portability by writing to aissa.b.code@gmail.com. You can also complain to the Spanish Data Protection Agency (aepd.es) or your local authority.</dd>
+  </dl>
+
+  <footer><a href="terms.html">Programme terms</a> · <a href="https://chispapps.com/thebotanicaleye/privacy">App privacy policy</a></footer>
+</main>
+
+<script src="config.js"></script>
+<script>
+  const form = document.getElementById('apply');
+  const result = document.getElementById('result');
+  const send = document.getElementById('send');
+
+  function say(text, isError) {
+    result.textContent = text;
+    result.className = 'msg' + (isError ? ' error' : '');
+    result.hidden = false;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    if (f.get('website')) { say('Thank you! We have received your application.'); form.reset(); return; }
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    send.disabled = true;
+    try {
+      await window.beRpc('submit_affiliate_application', {
+        p_name: f.get('name'),
+        p_email: f.get('email'),
+        p_handle: f.get('handle'),
+        p_platform: f.get('platform'),
+        p_followers: f.get('followers') ? Number(f.get('followers')) : null,
+        p_message: f.get('message') || null,
+        p_consent: f.get('consent') === 'on',
+        p_code: (f.get('code') || '').trim() || null,
+      });
+      say('Thank you! We have received your application. If it is a fit, you will get your code and your private dashboard by email within a few days.');
+      form.reset();
+    } catch (err) {
+      if (!err.status) say('We could not send your application. Please try again in a moment.', true);
+      else say(/too many/.test(err.message)
+        ? 'We have already received several applications from you today. We will be in touch soon.'
+        : 'Please check the form: something is missing or not valid.', true);
+    } finally {
+      send.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

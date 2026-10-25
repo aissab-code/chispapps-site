@@ -1,0 +1,788 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Admin · The Botanical Eye</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    [hidden] { display: none !important; }
+    main { max-width: 980px; }
+    .row2 { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+    .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+    .bar label { display: flex; gap: 8px; align-items: center; font-weight: 400; font-size: 14px; }
+    .bar label input { width: auto; }
+    .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing: .5px; }
+    td.mono, td.nowrap { white-space: nowrap; }
+    td button, .small { padding: 7px 12px; font-size: 13px; }
+    button.danger { background: var(--bad); color: #fff; }
+    code.block { display: block; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); overflow-x: auto; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin: 8px 0 24px; }
+    .tabs button { background: transparent; color: var(--muted); border-radius: 10px 10px 0 0; padding: 10px 14px; }
+    .tabs button[aria-selected="true"] { color: var(--accent); box-shadow: inset 0 -3px 0 var(--accent); }
+    .tabs .count { display: inline-block; min-width: 20px; margin-left: 6px; padding: 1px 6px; border-radius: 999px;
+                   background: var(--accent); color: var(--accent-ink); font-size: 12px; }
+    .stack { display: grid; gap: 14px; }
+    .stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); margin-top: 14px; }
+    .app-card h3 { margin: 0 0 4px; }
+    .meta { display: flex; flex-wrap: wrap; gap: 6px 16px; color: var(--muted); font-size: 14px; }
+    .quote { white-space: pre-wrap; margin: 10px 0 0; padding: 10px 12px; border-left: 3px solid var(--line); color: var(--text); }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .panel { margin-top: 14px; padding: 16px; border-radius: 12px; background: var(--accent-soft); display: grid; gap: 12px; }
+    .panel ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+    .kv { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .inline { display: flex; gap: 8px; align-items: center; }
+    .inline input { width: 110px; padding: 8px 10px; font-size: 14px; }
+    .note { font-size: 14px; color: var(--muted); }
+    .pill.new { color: var(--warn); }
+    .pill.paused { color: var(--warn); }
+    .pill.ready { color: var(--ok); }
+    .pill.todo { color: var(--warn); }
+  </style>
+</head>
+<body>
+<main>
+  <header class="brand"><div class="logo" aria-hidden="true">🌿</div><span>The Botanical Eye · Admin</span></header>
+
+  <!-- Locked: ask for the admin key. -->
+  <section id="locked">
+    <h1>Admin</h1>
+    <p class="lead">Friends, influencers and payouts. Open this page with your admin key.</p>
+    <div class="card">
+      <form id="unlock" novalidate>
+        <label>Admin key
+          <input id="key" name="key" type="password" autocomplete="off" required minlength="32">
+        </label>
+        <label class="check"><input id="remember" type="checkbox" checked><span>Remember the key on this browser. Only do this on your own devices.</span></label>
+        <button type="submit" id="open">Open</button>
+        <div id="unlock-msg" class="msg error" hidden></div>
+      </form>
+    </div>
+    <h2>No key yet?</h2>
+    <p>In Supabase, open the SQL editor of the botanical-eye project and run:</p>
+    <code class="block">select admin_new_key();</code>
+    <p class="muted" style="margin-top:12px">The result is your key, shown only once. Running it again makes a new key and switches the old one off.</p>
+  </section>
+
+  <!-- Unlocked. -->
+  <section id="app" hidden>
+    <div class="bar"><h1 style="margin:0">Admin</h1><button type="button" class="secondary small" id="lock">Lock</button></div>
+    <nav class="tabs" role="tablist">
+      <button type="button" role="tab" data-tab="applications">Applications<span class="count" id="count-applications" hidden></span></button>
+      <button type="button" role="tab" data-tab="influencers">Influencers</button>
+      <button type="button" role="tab" data-tab="payouts">Payouts<span class="count" id="count-payouts" hidden></span></button>
+      <button type="button" role="tab" data-tab="friends">Friends</button>
+      <button type="button" role="tab" data-tab="reports">AI reports<span class="count" id="count-reports" hidden></span></button>
+      <button type="button" role="tab" data-tab="settings">Settings</button>
+    </nav>
+    <div id="global-msg" class="msg" hidden style="margin-bottom:16px"></div>
+
+    <!-- Applications -->
+    <section data-panel="applications" hidden>
+      <p class="lead">People who applied on the <a href="unete.html" target="_blank">join page</a>. Approving creates their code and private dashboard and drafts the welcome email.</p>
+      <div class="bar"><h2 style="margin:0">Waiting for you</h2><label><input type="checkbox" id="apps-all"> Show decided ones</label></div>
+      <div id="applications" class="stack" style="margin-top:12px"></div>
+      <p id="applications-empty" class="muted" hidden>No applications waiting. Share the join page: https://chispapps.com/thebotanicaleye/partners/unete.html</p>
+    </section>
+
+    <!-- Influencers -->
+    <section data-panel="influencers" hidden>
+      <p class="lead">Everyone in the programme. Each one needs their own Apple offer before their code works on iPhone.</p>
+      <div id="offers-note" class="msg" style="margin-bottom:16px"></div>
+      <div id="influencers" class="stack"></div>
+      <p id="influencers-empty" class="muted" hidden>No influencers yet. Approve an application, or add someone below.</p>
+
+      <h2>Add an influencer by hand</h2>
+      <div class="card">
+        <form id="add-aff" novalidate>
+          <div class="row2">
+            <label>Name <input name="name" required maxlength="100" placeholder="Laura García"></label>
+            <label>Email <span class="muted">(optional)</span> <input name="email" type="email" maxlength="200"></label>
+            <label>Short name <input name="handle" required maxlength="40" class="mono" placeholder="laura_plants"></label>
+            <label>Code <input name="code" required maxlength="20" class="mono" placeholder="LAURA"></label>
+            <label>Commission % <input name="rate" type="number" min="0" max="50" step="1" value="20"></label>
+          </div>
+          <button type="submit">Add influencer</button>
+          <div id="add-aff-msg" class="msg" hidden></div>
+          <div id="add-aff-result"></div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Payouts -->
+    <section data-panel="payouts" hidden>
+      <p class="lead">Commissions wait 30 days for refunds, then become payable. Pay from <span id="min-pay">€20</span> by bank transfer, then mark it paid here: the influencer sees it on their dashboard.</p>
+      <h2>Balances</h2>
+      <div class="card table-wrap">
+        <table>
+          <thead><tr><th>Influencer</th><th class="num">On hold</th><th class="num">Payable</th><th class="num">Paid</th><th>Mark a transfer as paid</th></tr></thead>
+          <tbody id="balances"></tbody>
+        </table>
+        <p id="balances-empty" class="muted" hidden style="margin:12px 0 0">No commissions yet. They appear when someone who used a code pays after their free month.</p>
+      </div>
+      <h2>Payouts made</h2>
+      <div class="card table-wrap">
+        <table>
+          <thead><tr><th>Date</th><th>Influencer</th><th>Reference</th><th class="num">Amount</th></tr></thead>
+          <tbody id="payouts"></tbody>
+        </table>
+        <p id="payouts-empty" class="muted" hidden style="margin:12px 0 0">No payouts yet.</p>
+      </div>
+    </section>
+
+    <!-- Friends -->
+    <section data-panel="friends" hidden>
+      <p class="lead">Your friend sends you their ID from the app: Profile › Your ID. They get Premium the next time they open the app, with nothing to type, and a weekly scan allowance.</p>
+      <h2 style="margin-top:0">Give a friend Premium</h2>
+      <div class="card">
+        <form id="grant" novalidate>
+          <div class="row2">
+            <label>Their ID
+              <input id="friend-id" class="mono" required placeholder="3FA8-5F64" autocomplete="off" maxlength="40">
+            </label>
+            <label>Name
+              <input id="friend-name" required maxlength="60" placeholder="María (cousin)">
+            </label>
+            <label>For
+              <select id="months">
+                <option value="1">1 month</option>
+                <option value="3">3 months</option>
+                <option value="6">6 months</option>
+                <option value="12" selected>12 months</option>
+                <option value="">No end</option>
+              </select>
+            </label>
+            <label>Scans per week
+              <input id="friend-limit" type="number" min="1" max="10000" step="1" placeholder="Default">
+            </label>
+          </div>
+          <button type="submit" id="give">Give Premium</button>
+          <div id="grant-msg" class="msg" hidden></div>
+        </form>
+      </div>
+
+      <div class="bar" style="margin-top:36px">
+        <h2 style="margin:0">Your friends</h2>
+        <label><input type="checkbox" id="show-old"> Show ended and removed</label>
+      </div>
+      <div class="card table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr><th>Name</th><th>ID</th><th>Until</th><th>Last opened</th><th class="num">This week</th><th>Scans per week</th><th>Status</th><th></th></tr></thead>
+          <tbody id="friends"></tbody>
+        </table>
+        <p id="friends-empty" class="muted" hidden style="margin:12px 0 0">No friends yet. Give someone Premium above.</p>
+      </div>
+    </section>
+
+    <!-- AI reports -->
+    <section data-panel="reports" hidden>
+      <p class="lead">What people flagged in the app with "Report": a scan result or an answer to "Ask about this plant" (Google Play requires this). Read each one, fix the cause if there is one, and mark it reviewed. Reports are deleted after 12 months.</p>
+      <div class="bar">
+        <h2 style="margin:0">Reports</h2>
+        <label><input type="checkbox" id="show-reviewed"> Show reviewed</label>
+      </div>
+      <div class="card table-wrap" style="margin-top:12px">
+        <table>
+          <thead><tr><th>Date</th><th>Reason</th><th>Plant</th><th>What the AI said</th><th>From</th><th></th></tr></thead>
+          <tbody id="reports"></tbody>
+        </table>
+        <p id="reports-empty" class="muted" hidden style="margin:12px 0 0">No reports. Good news.</p>
+        <div id="reports-msg" class="msg" hidden></div>
+      </div>
+    </section>
+
+    <!-- Settings -->
+    <section data-panel="settings" hidden>
+      <h2 style="margin-top:0">Friends</h2>
+      <div class="card">
+        <form id="settings" novalidate>
+          <label>Scans per week for friends, unless you set their own
+            <input id="default-limit" type="number" min="1" max="10000" step="1" required style="max-width:200px">
+          </label>
+          <p class="note" style="margin:0">Weeks run Monday to Sunday. A friend who also subscribes is not limited. Changes apply at once.</p>
+          <button type="submit">Save</button>
+          <div id="settings-msg" class="msg" hidden></div>
+        </form>
+      </div>
+      <h2>Stores</h2>
+      <div class="card">
+        <p id="store-info" style="margin:0"></p>
+      </div>
+    </section>
+  </section>
+
+  <footer>Private page for the owner of The Botanical Eye.</footer>
+</main>
+
+<script src="config.js"></script>
+<script>
+  // Every admin function checks the admin key itself and refuses anything else. Everything
+  // people typed (applications, names) is shown with textContent, never as HTML.
+  const STORE = 'botanicaleye-admin-key';
+  const TAB_STORE = 'botanicaleye-admin-tab';
+  const SITE = 'https://chispapps.com/thebotanicaleye/partners/';
+  const ASC_SUBSCRIPTIONS = 'https://appstoreconnect.apple.com/apps/6821145242/distribution/subscriptions';
+  const APPLE_OFFER_LIMIT = 10;
+
+  const $ = (id) => document.getElementById(id);
+  let adminKey = null;
+  const state = { settings: null, friends: [], applications: [], influencers: [], payouts: null, reports: null };
+  const ui = { confirming: null, approving: null, paying: null, editingLimit: null, appleOpen: new Set(), results: {} };
+
+  // ---------------------------------------------------------------- helpers
+  function h(tag, attrs, ...children) {
+    const e = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs || {})) {
+      if (v === undefined || v === null || v === false) continue;
+      if (k === 'class') e.className = v;
+      else if (k === 'text') e.textContent = v;
+      else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+      else e.setAttribute(k, v === true ? '' : v);
+    }
+    for (const c of children.flat()) if (c !== null && c !== undefined && c !== false) e.append(c);
+    return e;
+  }
+  const rpc = (name, args) => window.beRpc(name, Object.assign({ p_key: adminKey }, args || {}));
+  function say(el, text, isError) {
+    el.textContent = text;
+    el.className = 'msg' + (isError ? ' error' : '');
+    el.hidden = false;
+  }
+  const day = (iso) => (iso ? new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '–');
+  const until = (iso) => (new Date(iso).getFullYear() >= 2099 ? 'No end' : day(iso));
+  const money = (n, cur) => new Intl.NumberFormat('en-GB', { style: 'currency', currency: cur || 'EUR' }).format(Number(n) || 0);
+  const pct = (rate) => Math.round(Number(rate) * 100) + '%';
+  const safeHref = (url) => (/^https?:\/\//i.test(url || '') ? url : null);
+  const safeMail = (email) => String(email || '').replace(/[^\w.+@-]/g, '');
+  function copyButton(label, value) {
+    const b = h('button', { type: 'button', class: 'secondary small', text: label });
+    b.addEventListener('click', () => navigator.clipboard.writeText(value).then(() => {
+      b.textContent = 'Copied';
+      setTimeout(() => { b.textContent = label; }, 1500);
+    }));
+    return b;
+  }
+  function pill(cls, text) { return h('span', { class: 'pill ' + cls, text }); }
+  function cell(text, cls) { return h('td', { class: cls, text }); }
+
+  // A handle suggestion from what someone typed as their profile.
+  function suggestHandle(raw) {
+    let s = String(raw || '').trim().toLowerCase();
+    s = s.replace(/^https?:\/\/(www\.)?[^/]+\//, '').replace(/^@/, '').split(/[/?#\s]/)[0];
+    // Dots become underscores: the short name is also the Apple offer's reference name.
+    return s.replace(/\./g, '_').replace(/[^a-z0-9_-]/g, '').slice(0, 40);
+  }
+  const suggestCode = (requested, handle) =>
+    (requested || handle.replace(/[^a-z0-9]/gi, '')).toUpperCase().slice(0, 20);
+
+  // ---------------------------------------------------------------- welcome email
+  function dashboardLink(token, lang) { return `${SITE}?lang=${lang}#k=${token}`; }
+  function welcomeEmail(a, token, lang) {
+    const link = dashboardLink(token, lang);
+    const first = String(a.display_name || '').split(' ')[0];
+    if (lang === 'es') {
+      return {
+        subject: `Tu código de The Botanical Eye: ${a.code}`,
+        body: [
+          `Hola, ${first}:`, '',
+          '¡Bienvenido/a al programa de colaboradores de The Botanical Eye!', '',
+          `Tu código: ${a.code}`,
+          `Da 1 mes gratis de Premium a quien se suscriba por primera vez con él, y tú ganas el ${pct(a.commission_rate)} de lo que paguen durante su primer año.`, '',
+          `Tu panel privado (es solo para ti, no lo compartas): ${link}`,
+          'Ahí tienes tu código, el enlace para tu biografía, cuántas personas lo usan y tus comisiones. En iPhone el código se activa en unos días; el panel te avisa.', '',
+          'Recuerda identificar siempre la colaboración como publicidad (#publi).',
+          `Condiciones: ${SITE}condiciones.html`, '',
+          '¡Gracias!', 'Aissa',
+        ].join('\n'),
+      };
+    }
+    return {
+      subject: `Your The Botanical Eye code: ${a.code}`,
+      body: [
+        `Hi ${first},`, '',
+        'Welcome to The Botanical Eye partner programme!', '',
+        `Your code: ${a.code}`,
+        `It gives 1 month of Premium free to anyone subscribing for the first time with it, and you earn ${pct(a.commission_rate)} of what they pay during their first year.`, '',
+        `Your private dashboard (just for you, please don't share it): ${link}`,
+        'It shows your code, the link for your bio, how many people used it and your commissions. On iPhone the code goes live within a few days; the dashboard tells you when.', '',
+        'Please always label the collaboration as advertising (#ad).',
+        `Terms: ${SITE}terms.html`, '',
+        'Thank you!', 'Aissa',
+      ].join('\n'),
+    };
+  }
+  // Shown once after creating an influencer or a new link: the token never comes back.
+  function linkPanel(a, token) {
+    let lang = 'es';
+    const wrap = h('div', { class: 'panel' });
+    const draw = () => {
+      const mail = welcomeEmail(a, token, lang);
+      const href = a.email
+        ? `mailto:${safeMail(a.email)}?subject=${encodeURIComponent(mail.subject)}&body=${encodeURIComponent(mail.body)}`
+        : null;
+      wrap.replaceChildren(
+        h('strong', { text: `${a.display_name}'s private dashboard link — shown only now, so send it before leaving this page:` }),
+        h('div', { class: 'kv' }, h('span', { class: 'link mono', text: dashboardLink(token, lang) }), copyButton('Copy link', dashboardLink(token, lang))),
+        h('div', { class: 'kv' },
+          h('span', { text: 'Welcome email in' }),
+          h('button', { type: 'button', class: lang === 'es' ? 'small' : 'secondary small', text: 'Spanish', onclick: () => { lang = 'es'; draw(); } }),
+          h('button', { type: 'button', class: lang === 'en' ? 'small' : 'secondary small', text: 'English', onclick: () => { lang = 'en'; draw(); } })),
+        h('div', { class: 'actions', style: 'margin:0' },
+          href ? h('a', { class: 'btn small', href, text: 'Open in my email app' }) : h('span', { class: 'note', text: 'No email address: copy the text instead.' }),
+          copyButton('Copy email text', `${mail.subject}\n\n${mail.body}`)));
+    };
+    draw();
+    return wrap;
+  }
+
+  // ---------------------------------------------------------------- Apple offer steps
+  function applePanel(a) {
+    const inUse = state.settings ? state.settings.apple_offers_in_use : 0;
+    return h('div', { class: 'panel' },
+      h('strong', { text: `Create ${a.display_name}'s Apple offer` }),
+      h('ol', null,
+        h('li', null, 'Open ', h('a', { href: ASC_SUBSCRIPTIONS, target: '_blank', rel: 'noopener noreferrer', text: 'App Store Connect › Subscriptions' }),
+          ' › Premium Monthly › Offer Codes › create an offer.'),
+        h('li', null, 'Reference name: ', h('span', { class: 'mono', text: a.apple_offer_ref + ' ' }), copyButton('Copy', a.apple_offer_ref),
+          h('span', { class: 'note', text: ' — exactly this; it is how sales are linked to them.' })),
+        h('li', { text: 'Customer eligibility: New subscribers. Offer: Free for 1 month.' }),
+        h('li', null, 'Custom code: ', h('span', { class: 'mono', text: a.code + ' ' }), copyButton('Copy', a.code), h('span', { class: 'note', text: ' — no end date.' })),
+        h('li', { text: 'Come back and tick it as done below.' })),
+      h('p', { class: 'note', style: 'margin:0', text: `Apple only issues these codes once the app and its subscriptions are approved, and allows ${APPLE_OFFER_LIMIT} active offers per subscription (${inUse} in use).` }),
+      h('div', { class: 'actions', style: 'margin:0' },
+        h('button', { type: 'button', class: 'small', text: 'Done: the offer exists', onclick: () => affUpdate(a, { p_apple_offer_ready: true }, `${a.display_name}'s iPhone link is now live on their dashboard.`) })));
+  }
+
+  // ---------------------------------------------------------------- applications
+  function renderApplications() {
+    const showAll = $('apps-all').checked;
+    const list = state.applications;
+    const open = list.filter((x) => x.status === 'new' || x.status === 'contacted');
+    $('count-applications').textContent = open.length;
+    $('count-applications').hidden = open.length === 0;
+    $('applications').replaceChildren(...list.map((app) => {
+      const profile = safeHref(app.handle);
+      const card = h('div', { class: 'card app-card' },
+        h('div', { class: 'bar' },
+          h('h3', { text: app.name }),
+          pill(app.status, { new: 'New', contacted: 'Contacted', accepted: 'Approved', rejected: 'Rejected' }[app.status] || app.status)),
+        h('div', { class: 'meta' },
+          h('a', { href: 'mailto:' + safeMail(app.email), text: app.email }),
+          h('span', null, app.platform + ' · ', profile ? h('a', { href: profile, target: '_blank', rel: 'noopener noreferrer', text: app.handle }) : app.handle),
+          app.followers != null ? h('span', { text: Number(app.followers).toLocaleString('en-GB') + ' followers' }) : null,
+          app.requested_code ? h('span', null, 'wants code ', h('span', { class: 'mono', text: app.requested_code })) : null,
+          h('span', { text: 'applied ' + day(app.created_at) }),
+          app.affiliate_handle ? h('span', { text: 'now ' + app.affiliate_handle }) : null),
+        app.message ? h('p', { class: 'quote', text: app.message }) : null);
+
+      if (ui.results['app:' + app.id]) card.append(ui.results['app:' + app.id]);
+
+      if (app.status === 'new' || app.status === 'contacted') {
+        if (ui.approving === app.id) {
+          const handle = suggestHandle(app.handle) || suggestHandle(app.email.split('@')[0]);
+          const form = h('form', { class: 'panel', novalidate: true },
+            h('div', { class: 'row2' },
+              h('label', null, 'Short name', h('input', { name: 'handle', class: 'mono', value: handle, maxlength: 40, required: true })),
+              h('label', null, 'Code', h('input', { name: 'code', class: 'mono', value: suggestCode(app.requested_code, handle), maxlength: 20, required: true })),
+              h('label', null, 'Commission %', h('input', { name: 'rate', type: 'number', min: 0, max: 50, step: 1, value: 20 }))),
+            h('p', { class: 'note', style: 'margin:0', text: 'The short name becomes the Apple offer name inf_<short name>. Codes: 3–20 letters or digits.' }),
+            h('div', { class: 'actions', style: 'margin:0' },
+              h('button', { type: 'submit', text: 'Approve and create' }),
+              h('button', { type: 'button', class: 'secondary', text: 'Cancel', onclick: () => { ui.approving = null; renderApplications(); } })),
+            h('div', { class: 'msg error', hidden: true }));
+          form.addEventListener('submit', (e) => approve(e, app, form));
+          card.append(form);
+        } else {
+          const confirming = ui.confirming === 'reject:' + app.id;
+          card.append(h('div', { class: 'actions' },
+            h('button', { type: 'button', text: 'Approve…', onclick: () => { ui.approving = app.id; ui.confirming = null; renderApplications(); } }),
+            h('button', { type: 'button', class: confirming ? 'danger' : 'secondary', text: confirming ? 'Confirm reject' : 'Reject', onclick: () => reject(app) })));
+        }
+      }
+      return card;
+    }).filter((card, i) => showAll || ['new', 'contacted'].includes(list[i].status) || ui.results['app:' + list[i].id]));
+    $('applications-empty').hidden = $('applications').children.length > 0;
+  }
+
+  async function approve(e, app, form) {
+    e.preventDefault();
+    const f = new FormData(form);
+    const msg = form.querySelector('.msg');
+    form.querySelector('button[type=submit]').disabled = true;
+    try {
+      const a = await rpc('admin_application_approve', {
+        p_application_id: app.id, p_handle: f.get('handle'), p_code: f.get('code'),
+        p_commission_rate: (Number(f.get('rate')) || 20) / 100,
+      });
+      ui.approving = null;
+      ui.results['app:' + app.id] = h('div', null,
+        h('p', { class: 'msg', style: 'margin-top:14px', text: `${a.display_name} is in, with code ${a.code}. Send the welcome email now, then create their Apple offer (Influencers tab).` }),
+        linkPanel(a, a.token));
+      ui.appleOpen.add(a.handle);
+      await loadAll();
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.hidden = false;
+      form.querySelector('button[type=submit]').disabled = false;
+    }
+  }
+
+  async function reject(app) {
+    const key = 'reject:' + app.id;
+    if (ui.confirming !== key) { ui.confirming = key; renderApplications(); return; }
+    ui.confirming = null;
+    try {
+      await rpc('admin_application_reject', { p_application_id: app.id });
+      say($('global-msg'), `${app.name}'s application was rejected. It is deleted automatically after 12 months.`);
+      await loadAll();
+    } catch (err) { say($('global-msg'), err.message, true); }
+  }
+
+  // ---------------------------------------------------------------- influencers
+  function eur(balances, key) {
+    if (!balances || !balances.length) return money(0, 'EUR');
+    return balances.map((b) => money(b[key], b.currency)).join(' · ');
+  }
+
+  function renderInfluencers() {
+    const inUse = state.settings ? state.settings.apple_offers_in_use : 0;
+    $('offers-note').textContent = `Apple offers in use: ${inUse} of ${APPLE_OFFER_LIMIT} per subscription. Ending an influencer frees theirs (also deactivate it in App Store Connect).`;
+    $('influencers').replaceChildren(...state.influencers.map((a) => {
+      const ready = !!a.apple_offer_ready_at;
+      const card = h('div', { class: 'card' },
+        h('div', { class: 'bar' },
+          h('div', null, h('h3', { style: 'margin:0', text: a.display_name }),
+            h('div', { class: 'meta' },
+              h('span', { class: 'mono', text: a.code }),
+              h('span', { text: a.handle }),
+              a.email ? h('a', { href: 'mailto:' + safeMail(a.email), text: a.email }) : null,
+              h('span', { text: pct(a.commission_rate) + ' for ' + a.commission_months + ' months' }),
+              h('span', { text: 'since ' + day(a.created_at) }))),
+          h('div', { class: 'kv' },
+            pill(a.status, { active: 'Active', paused: 'Paused', ended: 'Ended' }[a.status]),
+            a.status !== 'ended' ? pill(ready ? 'ready' : 'todo', ready ? 'iPhone ready' : 'Apple offer to do') : null)),
+        h('div', { class: 'stats' },
+          stat(a.referred, 'used the code' + (a.referred_sandbox ? ` (+${a.referred_sandbox} test)` : '')),
+          stat(a.paying, 'are paying'),
+          stat(eur(a.balances, 'pending'), 'on hold'),
+          stat(eur(a.balances, 'payable'), 'payable'),
+          stat(eur(a.balances, 'paid'), 'paid')));
+
+      if (ui.results['aff:' + a.handle]) card.append(ui.results['aff:' + a.handle]);
+      if (a.status !== 'ended' && !ready && ui.appleOpen.has(a.handle)) card.append(applePanel(a));
+
+      if (a.status !== 'ended') {
+        const endKey = 'end:' + a.handle;
+        card.append(h('div', { class: 'actions' },
+          !ready ? h('button', { type: 'button', class: ui.appleOpen.has(a.handle) ? 'secondary small' : 'small',
+            text: ui.appleOpen.has(a.handle) ? 'Hide Apple steps' : 'Set up Apple offer',
+            onclick: () => { ui.appleOpen.has(a.handle) ? ui.appleOpen.delete(a.handle) : ui.appleOpen.add(a.handle); renderInfluencers(); } }) : null,
+          a.status === 'active'
+            ? h('button', { type: 'button', class: 'secondary small', text: 'Pause', onclick: () => affUpdate(a, { p_status: 'paused' }, `${a.display_name} is paused: no new commissions until you resume.`) })
+            : h('button', { type: 'button', class: 'secondary small', text: 'Resume', onclick: () => affUpdate(a, { p_status: 'active' }, `${a.display_name} is active again.`) }),
+          h('button', { type: 'button', class: 'secondary small', text: 'New dashboard link', onclick: () => newLink(a) }),
+          ready ? h('button', { type: 'button', class: 'secondary small', text: 'Apple offer not live', onclick: () => affUpdate(a, { p_apple_offer_ready: false }, `${a.display_name}'s iPhone link is hidden again.`) }) : null,
+          h('button', { type: 'button', class: ui.confirming === endKey ? 'danger small' : 'secondary small', text: ui.confirming === endKey ? 'Confirm end' : 'End',
+            onclick: () => {
+              if (ui.confirming !== endKey) { ui.confirming = endKey; renderInfluencers(); return; }
+              ui.confirming = null;
+              affUpdate(a, { p_status: 'ended', p_apple_offer_ready: false }, `${a.display_name} has left the programme. Deactivate the offer ${a.apple_offer_ref} in App Store Connect; what they earned before stays payable.`);
+            } })));
+      }
+      return card;
+    }));
+    $('influencers-empty').hidden = state.influencers.length > 0;
+  }
+  function stat(n, label) {
+    return h('div', { class: 'card stat', style: 'padding:14px' }, h('div', { class: 'n', style: 'font-size:22px', text: String(n) }), h('div', { class: 'l', text: label }));
+  }
+
+  async function affUpdate(a, args, okText) {
+    try {
+      await rpc('admin_affiliate_update', Object.assign({ p_handle: a.handle }, args));
+      say($('global-msg'), okText);
+      if (args.p_apple_offer_ready) ui.appleOpen.delete(a.handle);
+      await loadAll();
+    } catch (err) { say($('global-msg'), err.message, true); }
+  }
+
+  async function newLink(a) {
+    try {
+      const r = await rpc('admin_affiliate_new_link', { p_handle: a.handle });
+      ui.results['aff:' + a.handle] = h('div', null,
+        h('p', { class: 'msg', style: 'margin-top:14px', text: 'The old link has stopped working. Send this one:' }),
+        linkPanel(a, r.token));
+      renderInfluencers();
+    } catch (err) { say($('global-msg'), err.message, true); }
+  }
+
+  $('add-aff').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const form = e.target;
+    const f = new FormData(form);
+    try {
+      const a = await rpc('admin_affiliate_create', {
+        p_handle: f.get('handle'), p_name: f.get('name'), p_code: f.get('code'),
+        p_email: f.get('email') || null, p_commission_rate: (Number(f.get('rate')) || 20) / 100,
+      });
+      form.reset();
+      $('add-aff-msg').hidden = true;
+      $('add-aff-result').replaceChildren(h('p', { class: 'msg', text: `${a.display_name} is in, with code ${a.code}.` }), linkPanel(a, a.token));
+      ui.appleOpen.add(a.handle);
+      await loadAll();
+    } catch (err) { say($('add-aff-msg'), err.message, true); }
+  });
+
+  // ---------------------------------------------------------------- payouts
+  function renderPayouts() {
+    const p = state.payouts || { minimum: 20, balances: [], payouts: [] };
+    $('min-pay').textContent = money(p.minimum, 'EUR');
+    const due = p.balances.filter((b) => Number(b.payable) >= Number(p.minimum));
+    $('count-payouts').textContent = due.length;
+    $('count-payouts').hidden = due.length === 0;
+    $('balances').replaceChildren(...p.balances.map((b) => {
+      const key = b.handle + ':' + b.currency;
+      const canPay = Number(b.payable) >= Number(p.minimum);
+      let action;
+      if (!canPay) action = h('td', { class: 'note', text: `below ${money(p.minimum, b.currency)}` });
+      else if (ui.paying === key) {
+        const input = h('input', { placeholder: 'Reference, e.g. TRANSFER-2026-11', maxlength: 100, style: 'width:220px' });
+        action = h('td', null, h('div', { class: 'inline' }, input,
+          h('button', { type: 'button', class: 'small', text: 'Paid', onclick: () => pay(b, input.value) }),
+          h('button', { type: 'button', class: 'secondary small', text: 'Cancel', onclick: () => { ui.paying = null; renderPayouts(); } })));
+      } else {
+        action = h('td', null, h('button', { type: 'button', class: 'small', text: `I transferred ${money(b.payable, b.currency)}`, onclick: () => { ui.paying = key; renderPayouts(); } }));
+      }
+      return h('tr', null,
+        h('td', null, h('strong', { text: b.display_name }), h('br'), h('span', { class: 'note', text: b.email || b.handle })),
+        cell(money(b.pending, b.currency), 'num'), cell(money(b.payable, b.currency), 'num'), cell(money(b.paid, b.currency), 'num'), action);
+    }));
+    $('balances-empty').hidden = p.balances.length > 0;
+    $('payouts').replaceChildren(...p.payouts.map((x) =>
+      h('tr', null, cell(day(x.paid_on), 'nowrap'), cell(x.display_name), cell(x.reference || '—', 'mono'), cell(money(x.amount, x.currency), 'num'))));
+    $('payouts-empty').hidden = p.payouts.length > 0;
+  }
+
+  async function pay(b, reference) {
+    try {
+      const r = await rpc('admin_affiliate_pay', { p_handle: b.handle, p_reference: reference, p_currency: b.currency });
+      ui.paying = null;
+      say($('global-msg'), r.paid
+        ? `Booked: ${money(r.amount, r.currency)} paid to ${b.display_name}. Ask them for the invoice.`
+        : `Nothing booked: ${money(r.due, r.currency)} is payable, below the minimum.`, !r.paid);
+      await loadAll();
+    } catch (err) { say($('global-msg'), err.message, true); }
+  }
+
+  // ---------------------------------------------------------------- friends
+  function renderFriends() {
+    const showOld = $('show-old').checked;
+    const def = state.settings ? state.settings.friend_weekly_scan_limit : 40;
+    $('friend-limit').placeholder = `Default (${def})`;
+    const shown = state.friends.filter((f) => showOld || f.status === 'active');
+    $('friends').replaceChildren(...shown.map((f) => {
+      const action = h('td');
+      if (f.status === 'active') {
+        const removing = ui.confirming === 'remove:' + f.id;
+        action.append(h('button', { type: 'button', class: removing ? 'danger small' : 'secondary small', text: removing ? 'Confirm' : 'Remove', onclick: () => removeFriend(f) }));
+      }
+      let limitCell;
+      if (f.status === 'active' && ui.editingLimit === f.id) {
+        const input = h('input', { type: 'number', min: 1, max: 10000, step: 1, value: f.custom_weekly_limit ?? '', placeholder: `Default (${def})` });
+        limitCell = h('td', null, h('div', { class: 'inline' }, input,
+          h('button', { type: 'button', class: 'small', text: 'Save', onclick: () => setLimit(f, input.value) }),
+          h('button', { type: 'button', class: 'secondary small', text: 'Cancel', onclick: () => { ui.editingLimit = null; renderFriends(); } })));
+      } else {
+        limitCell = h('td', { class: 'nowrap' }, String(f.weekly_limit) + (f.custom_weekly_limit == null ? ' (default) ' : ' '),
+          f.status === 'active' ? h('button', { type: 'button', class: 'secondary small', text: 'Change', onclick: () => { ui.editingLimit = f.id; renderFriends(); } }) : null);
+      }
+      const over = f.status === 'active' && f.scans_week >= f.weekly_limit;
+      return h('tr', null, cell(f.name), cell(f.friend_id, 'mono'), cell(until(f.expires_at), 'nowrap'),
+        cell(day(f.last_seen_at), 'nowrap'), h('td', { class: 'num' }, over ? pill('todo', `${f.scans_week} / ${f.weekly_limit}`) : `${f.scans_week} / ${f.weekly_limit}`),
+        limitCell, h('td', null, pill(f.status, { active: 'Active', ended: 'Ended', removed: 'Removed' }[f.status] || f.status)), action);
+    }));
+    $('friends-empty').hidden = shown.length > 0;
+    $('friends-empty').textContent = state.friends.length ? 'No active friends. Tick "Show ended and removed" to see the others.' : 'No friends yet. Give someone Premium above.';
+  }
+
+  async function removeFriend(f) {
+    const key = 'remove:' + f.id;
+    if (ui.confirming !== key) { ui.confirming = key; renderFriends(); return; }
+    ui.confirming = null;
+    try {
+      await rpc('admin_friend_remove', { p_grant_id: f.id });
+      say($('grant-msg'), `${f.name} no longer has free Premium (from their next app start).`);
+      await loadAll();
+    } catch (err) { say($('grant-msg'), err.message, true); renderFriends(); }
+  }
+
+  async function setLimit(f, value) {
+    try {
+      const r = await rpc('admin_friend_set_limit', { p_grant_id: f.id, p_weekly_limit: value === '' ? null : Number(value) });
+      ui.editingLimit = null;
+      say($('grant-msg'), `${f.name} now has ${r.weekly_limit} scans a week.`);
+      await loadAll();
+    } catch (err) { say($('grant-msg'), err.message, true); }
+  }
+
+  $('grant').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('friend-name').value.trim();
+    const id = $('friend-id').value.trim();
+    if (!id || !name) { say($('grant-msg'), 'Fill in their ID and a name.', true); return; }
+    const months = $('months').value ? Number($('months').value) : null;
+    const limit = $('friend-limit').value ? Number($('friend-limit').value) : null;
+    $('give').disabled = true;
+    try {
+      const g = await rpc('admin_friend_grant', { p_friend_id: id, p_name: name, p_months: months, p_weekly_limit: limit });
+      say($('grant-msg'), `${name} (${g.friend_id}) now has Premium` + (months ? ` until ${day(g.expires_at)}` : ', with no end') + `, ${g.weekly_limit} scans a week.`);
+      $('grant').reset();
+      await loadAll();
+    } catch (err) {
+      say($('grant-msg'), err.message, true);
+    } finally {
+      $('give').disabled = false;
+    }
+  });
+
+  // ---------------------------------------------------------------- AI reports
+  const REASONS = { wrong: 'Wrong', offensive: 'Offensive', unsafe: 'Unsafe advice', other: 'Other' };
+  function renderReports() {
+    if (state.reports === null) {
+      $('reports').replaceChildren();
+      $('reports-empty').hidden = false;
+      $('reports-empty').textContent = 'Reports are not installed yet: apply the migration 20261015000100_ai_reports.sql.';
+      $('count-reports').hidden = true;
+      return;
+    }
+    const open = state.reports.filter((r) => !r.reviewed_at);
+    $('count-reports').textContent = open.length;
+    $('count-reports').hidden = open.length === 0;
+    const shown = $('show-reviewed').checked ? state.reports : open;
+    $('reports').replaceChildren(...shown.map((r) => {
+      const said = h('td', null,
+        r.question ? h('div', { class: 'muted', text: 'Q: ' + r.question }) : null,
+        h('div', { text: r.content, style: 'white-space:pre-wrap;max-width:520px' }));
+      const from = [r.reporter, r.language, r.platform, r.app_version].filter(Boolean).join(' · ');
+      const action = h('td');
+      if (r.reviewed_at) action.append(pill('ready', 'Reviewed'));
+      else action.append(h('button', { type: 'button', class: 'secondary small', text: 'Reviewed', onclick: () => markReviewed(r) }));
+      return h('tr', null, cell(day(r.created_at), 'nowrap'),
+        h('td', null, pill(r.reason === 'offensive' || r.reason === 'unsafe' ? 'todo' : 'new', REASONS[r.reason] || r.reason),
+          h('div', { class: 'muted', text: r.kind === 'answer' ? 'Answer' : 'Scan result' })),
+        cell(r.plant_name || '–'), said, cell(from, 'mono'), action);
+    }));
+    $('reports-empty').hidden = shown.length > 0;
+    $('reports-empty').textContent = state.reports.length ? 'No open reports. Tick "Show reviewed" to see the others.' : 'No reports. Good news.';
+  }
+
+  async function markReviewed(r) {
+    try {
+      await rpc('admin_ai_report_reviewed', { p_id: r.id });
+      await loadReports();
+    } catch (err) { say($('reports-msg'), err.message, true); }
+  }
+
+  // Loaded on its own, so the rest of the page keeps working before the reports migration exists.
+  async function loadReports() {
+    try { state.reports = await rpc('admin_ai_reports', { p_all: true }); }
+    catch (err) { state.reports = null; console.warn('AI reports unavailable', err); }
+    renderReports();
+  }
+
+  // ---------------------------------------------------------------- settings
+  function renderSettings() {
+    const s = state.settings;
+    if (!s) return;
+    if (document.activeElement !== $('default-limit')) $('default-limit').value = s.friend_weekly_scan_limit;
+    $('store-info').textContent =
+      `App Store app id: ${s.apple_app_id || 'not set'}. Google Play redeem links: ${s.play_redeem ? 'on' : 'off (switch on once the Android app is live)'}.`;
+  }
+
+  $('settings').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    try {
+      const r = await rpc('admin_settings_set', { p_friend_weekly_limit: Number($('default-limit').value) });
+      say($('settings-msg'), `Saved: friends without their own number get ${r.friend_weekly_scan_limit} scans a week.`);
+      await loadAll();
+    } catch (err) { say($('settings-msg'), err.message, true); }
+  });
+
+  // ---------------------------------------------------------------- loading and tabs
+  async function loadAll() {
+    const [settings, friends, applications, influencers, payouts] = await Promise.all([
+      rpc('admin_settings'), rpc('admin_friend_list'), rpc('admin_application_list', { p_all: true }),
+      rpc('admin_affiliate_list'), rpc('admin_payout_overview'),
+    ]);
+    Object.assign(state, { settings, friends, applications, influencers, payouts });
+    renderSettings(); renderFriends(); renderApplications(); renderInfluencers(); renderPayouts();
+    await loadReports();
+  }
+
+  function showTab(name) {
+    document.querySelectorAll('.tabs [data-tab]').forEach((b) => b.setAttribute('aria-selected', String(b.dataset.tab === name)));
+    document.querySelectorAll('[data-panel]').forEach((p) => { p.hidden = p.dataset.panel !== name; });
+    $('global-msg').hidden = true;
+    try { localStorage.setItem(TAB_STORE, name); } catch {}
+  }
+  document.querySelectorAll('.tabs [data-tab]').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab)));
+
+  async function unlock(key, remember) {
+    adminKey = key;
+    try {
+      await loadAll();
+    } catch (e) {
+      adminKey = null;
+      try { localStorage.removeItem(STORE); } catch {}
+      throw e;
+    }
+    try { if (remember) localStorage.setItem(STORE, key); } catch {}
+    $('locked').hidden = true;
+    $('app').hidden = false;
+    let tab = null;
+    try { tab = localStorage.getItem(TAB_STORE); } catch {}
+    const open = state.applications.some((a) => a.status === 'new' || a.status === 'contacted');
+    showTab(open ? 'applications' : (tab || 'influencers'));
+  }
+
+  $('unlock').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = $('key').value.trim();
+    if (key.length < 32) { say($('unlock-msg'), 'That is not an admin key: it has 64 characters.', true); return; }
+    $('open').disabled = true;
+    try {
+      await unlock(key, $('remember').checked);
+      $('key').value = '';
+    } catch (err) {
+      say($('unlock-msg'), err.status === 401 || err.status === 403 || /not allowed/.test(err.message)
+        ? 'That key does not work. Make a new one with select admin_new_key();'
+        : (err.status === 404 ? 'The admin back end is not installed yet: apply the latest database migration.' : err.message), true);
+    } finally {
+      $('open').disabled = false;
+    }
+  });
+
+  $('apps-all').addEventListener('change', renderApplications);
+  $('show-old').addEventListener('change', renderFriends);
+  $('show-reviewed').addEventListener('change', renderReports);
+  $('lock').addEventListener('click', () => {
+    try { localStorage.removeItem(STORE); } catch {}
+    adminKey = null;
+    Object.assign(state, { settings: null, friends: [], applications: [], influencers: [], payouts: null, reports: null });
+    $('app').hidden = true;
+    $('locked').hidden = false;
+  });
+
+  (async () => {
+    let saved = null;
+    try { saved = localStorage.getItem(STORE); } catch {}
+    if (!saved) return;
+    try { await unlock(saved, true); } catch (e) {
+      say($('unlock-msg'), 'The saved key no longer works. Enter your current admin key.', true);
+    }
+  })();
+</script>
+</body>
+</html>

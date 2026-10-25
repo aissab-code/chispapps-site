@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Chispapps</title>
+<meta name="description" content="Chispapps is an independent app studio building quality mobile apps that add real value.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<style>
+  /* Deliberately light-only corporate look.
+     Layout: mock browser bar, sticky nav, hero with product-card visual, facts strip,
+     principles, apps portfolio, process, contact band, footer. */
+  :root {
+    --white: #ffffff;
+    --mist: #f6f8fc;
+    --line: #e4e8f1;
+    --navy: #0b1530;
+    --slate: #4a5671;
+    --faint: #8893aa;
+    --indigo: #4f46e5;
+    --blue: #2f7cf6;
+    --teal: #12b5a5;
+    --grad: linear-gradient(135deg, #4f46e5 0%, #2f7cf6 60%, #12b5a5 100%);
+    --font: "Plus Jakarta Sans", "Segoe UI", -apple-system, system-ui, sans-serif;
+    --r: 16px;
+    --shadow: 0 1px 2px rgba(11,21,48,.05), 0 8px 24px rgba(11,21,48,.06);
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin: 0; overflow-x: hidden; overflow-x: clip; }
+  body {
+    background: var(--white); color: var(--navy); font-family: var(--font);
+    font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  a { color: inherit; text-decoration: none; }
+  .wrap {
+    max-width: 1080px; margin: 0 auto;
+    padding-left: max(20px, env(safe-area-inset-left, 0px));
+    padding-right: max(20px, env(safe-area-inset-right, 0px));
+  }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--indigo);
+  }
+  h2.title { font-size: clamp(1.6rem, 5vw, 2.3rem); line-height: 1.15; letter-spacing: -0.025em; margin: 10px 0 12px; font-weight: 800; text-wrap: balance; }
+  .sub { color: var(--slate); margin: 0; max-width: 56ch; }
+  section { padding-block: 64px; }
+
+  /* Mock browser bar */
+  .chrome { background: var(--mist); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+  .chrome .wrap { padding-block: 8px; display: flex; justify-content: center; }
+  .url {
+    display: inline-flex; align-items: center; gap: 7px; background: var(--white); border: 1px solid var(--line);
+    border-radius: 999px; padding: 5px 14px; font-size: .82rem; color: var(--faint); max-width: 100%;
+  }
+  .url b { color: var(--navy); font-weight: 600; }
+
+  /* Nav */
+  .nav { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.88); backdrop-filter: saturate(160%) blur(10px); -webkit-backdrop-filter: saturate(160%) blur(10px); border-bottom: 1px solid var(--line); }
+  .nav .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
+  .brand { display: inline-flex; align-items: center; gap: 2px; font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; }
+  .brand .app { background: var(--grad); color: #fff; border-radius: 8px; padding: 1px 7px 2px; margin-left: 2px; }
+  .links { display: flex; gap: 26px; font-size: .92rem; color: var(--slate); font-weight: 500; }
+  .links a:hover { color: var(--navy); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 600; font-size: .95rem; border-radius: 10px; padding: 11px 18px; cursor: pointer; border: 1px solid transparent;
+    transition: transform .15s, box-shadow .15s, background .15s;
+  }
+  .btn-primary { background: var(--navy); color: #fff; }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(11,21,48,.18); }
+  .btn-ghost { background: var(--white); color: var(--navy); border-color: var(--line); }
+  .btn-ghost:hover { border-color: #cdd4e3; }
+  .btn:focus-visible, a:focus-visible { outline: 2px solid var(--indigo); outline-offset: 3px; }
+  .nav .btn { padding: 8px 14px; font-size: .88rem; }
+
+  /* Hero */
+  .hero { position: relative; padding-block: 72px 56px; overflow: hidden; }
+  .hero::before {
+    content: ""; position: absolute; inset: -40% -20% auto auto; width: 720px; height: 720px; z-index: -1;
+    background: radial-gradient(closest-side, rgba(79,70,229,.14), rgba(47,124,246,.08) 55%, transparent 75%);
+  }
+  .hero .wrap { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--white);
+    border-radius: 999px; padding: 5px 12px 5px 6px; font-size: .82rem; color: var(--slate); box-shadow: var(--shadow);
+  }
+  .pill i { font-style: normal; background: #eef0ff; color: var(--indigo); font-weight: 700; border-radius: 999px; padding: 2px 8px; font-size: .72rem; }
+  .hero h1 { font-size: clamp(2.3rem, 8vw, 3.9rem); line-height: 1.05; letter-spacing: -0.035em; margin: 20px 0 18px; font-weight: 800; text-wrap: balance; }
+  .hero h1 .g { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero p.lead { font-size: 1.1rem; color: var(--slate); margin: 0 0 28px; max-width: 46ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+
+  /* Hero visual: stacked app cards */
+  .visual { position: relative; min-height: 340px; }
+  .card {
+    position: absolute; background: var(--white); border: 1px solid var(--line); border-radius: 20px; box-shadow: 0 20px 50px rgba(11,21,48,.10);
+    padding: 16px; width: 230px;
+  }
+  .card .row { display: flex; align-items: center; gap: 12px; }
+  .icon { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; flex: none; }
+  .icon svg { width: 22px; height: 22px; }
+  .card { width: auto !important; min-width: 210px; }
+  .card b { display: block; font-size: .95rem; white-space: nowrap; line-height: 1.3; }
+  .card small { color: var(--faint); font-size: .78rem; white-space: nowrap; }
+  section[id] { scroll-margin-top: 64px; }
+  .bar2 { height: 8px; border-radius: 99px; background: var(--mist); margin-top: 14px; overflow: hidden; }
+  .bar2 span { display: block; height: 100%; background: var(--grad); border-radius: 99px; }
+  .c1 { top: 0; left: 8%; transform: rotate(-4deg); }
+  .c2 { top: 110px; right: 0; transform: rotate(3deg); }
+  .c3 { top: 220px; left: 0; transform: rotate(-1.5deg); }
+  .stars { color: #f5b301; font-size: .8rem; letter-spacing: 1px; margin-top: 10px; }
+
+  /* Facts strip */
+  .facts { padding-block: 0; }
+  .facts .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); border: 1px solid var(--line); border-radius: var(--r); background: var(--mist); }
+  .fact { padding: 22px 20px; border-left: 1px solid var(--line); min-width: 0; }
+  .fact:first-child { border-left: 0; }
+  .fact strong { display: block; font-size: 1.7rem; letter-spacing: -0.03em; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .fact span { color: var(--slate); font-size: .88rem; }
+
+  /* Principles */
+  .principles { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 34px; }
+  .principle { border: 1px solid var(--line); border-radius: var(--r); padding: 24px; background: var(--white); min-width: 0; transition: box-shadow .2s, transform .2s; }
+  .principle:hover { box-shadow: var(--shadow); transform: translateY(-2px); }
+  .principle .icon { background: #eef0ff; color: var(--indigo); margin-bottom: 16px; }
+  .principle h3 { margin: 0 0 6px; font-size: 1.08rem; letter-spacing: -0.01em; }
+  .principle p { margin: 0; color: var(--slate); font-size: .95rem; }
+
+  /* Apps */
+  .apps-sec { background: var(--mist); border-block: 1px solid var(--line); }
+  .apps { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; margin-top: 34px; }
+  a.app:hover { border-color: #cdd4e3; box-shadow: var(--shadow); }
+  .app { background: var(--white); border: 1px solid var(--line); border-radius: var(--r); padding: 22px; display: flex; gap: 16px; min-width: 0; }
+  .app .icon { width: 52px; height: 52px; border-radius: 14px; color: #fff; }
+  .app .icon svg { width: 26px; height: 26px; }
+  .app h3 { margin: 0; font-size: 1.05rem; }
+  .app .cat { font-size: .78rem; color: var(--faint); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+  .app p { margin: 6px 0 10px; color: var(--slate); font-size: .94rem; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { font-size: .74rem; font-weight: 600; color: var(--slate); background: var(--mist); border: 1px solid var(--line); border-radius: 999px; padding: 2px 9px; }
+
+  /* Process */
+  .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; margin-top: 34px; counter-reset: s; }
+  .step { position: relative; padding-top: 18px; border-top: 2px solid var(--line); min-width: 0; }
+  .step::before { counter-increment: s; content: "0" counter(s); position: absolute; top: -2px; left: 0; width: 34px; border-top: 2px solid var(--indigo); padding-top: 14px; font-size: .78rem; font-weight: 700; color: var(--indigo); }
+  .step h3 { margin: 18px 0 4px; font-size: 1rem; }
+  .step p { margin: 0; color: var(--slate); font-size: .92rem; }
+
+  /* Contact band */
+  .band { border-radius: 24px; padding: 44px 32px; background: var(--navy); color: #fff; position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px; }
+  .band::after { content: ""; position: absolute; width: 420px; height: 420px; right: -120px; top: -180px; background: radial-gradient(closest-side, rgba(47,124,246,.55), transparent); }
+  .band > * { position: relative; z-index: 1; }
+  .band h2 { margin: 0 0 6px; font-size: clamp(1.4rem, 4.5vw, 1.9rem); letter-spacing: -0.02em; }
+  .band p { margin: 0; color: #b9c3dc; }
+  .band .btn { background: #fff; color: var(--navy); }
+
+  footer { padding-block: 36px 44px; color: var(--faint); font-size: .86rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 24px; justify-content: space-between; align-items: center; }
+  footer nav { display: flex; gap: 20px; }
+
+  @media (max-width: 860px) {
+    .links { display: none; }
+    .hero { padding-block: 44px 40px; }
+    .hero .wrap { grid-template-columns: 1fr; gap: 36px; }
+    .visual { min-height: 300px; max-width: 360px; width: 100%; margin: 0 auto; }
+    .card { width: 210px; }
+    .facts .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .fact:nth-child(3) { border-left: 0; }
+    .fact:nth-child(n+3) { border-top: 1px solid var(--line); }
+    .principles, .apps { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; }
+    section { padding-block: 52px; }
+    .band { padding: 32px 24px; }
+  }
+  @media (max-width: 380px) {
+    .card { width: 190px; }
+    .actions .btn { flex: 1 1 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Chispapps home">Chisp<span class="app">apps</span></a>
+    <nav class="links" aria-label="Main">
+      <a href="#principles">Principles</a>
+      <a href="#apps">Apps</a>
+      <a href="#process">How we work</a>
+    </nav>
+    <a class="btn btn-primary" href="#contact">Contact</a>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <span class="pill"><i>New</i> Now on iOS and Android</span>
+        <h1>Every app is its own world. We build <span class="g">the ones that matter.</span></h1>
+        <p class="lead">Chispapps is an independent app studio. We design, build and care for mobile apps that solve real problems, with the quality you expect from the best.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#apps">Explore our apps</a>
+          <a class="btn btn-ghost" href="#principles">Our commitments</a>
+        </div>
+      </div>
+
+      <div class="visual" aria-hidden="true">
+        <div class="card c1">
+          <div class="row">
+            <span class="icon" style="background:#eef0ff;color:#4f46e5"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14Z"/><path d="m9 10 2 2 4-4"/></svg></span>
+            <div><b>Homework checked</b><small>Repasito · 12 of 12 correct</small></div>
+          </div>
+          <div class="bar2"><span style="width:100%"></span></div>
+        </div>
+        <div class="card c2">
+          <div class="row">
+            <span class="icon" style="background:#e3f8f5;color:#0f9488"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/></svg></span>
+            <div><b>Monstera deliciosa</b><small>The Botanical Eye · 97% match</small></div>
+          </div>
+          <div class="stars">★★★★★</div>
+        </div>
+        <div class="card c3">
+          <div class="row">
+            <span class="icon" style="background:#e8f1ff;color:#2f7cf6"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h2m14 0h2M5 17V7h9v10M14 10h4l3 3v4h-2"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="17.5" cy="17.5" r="1.5"/></svg></span>
+            <div><b>Route ready · 742 km</b><small>Truck Route Planner</small></div>
+          </div>
+          <div class="bar2"><span style="width:68%"></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="facts" aria-label="Chispapps in numbers">
+    <div class="wrap">
+      <div class="grid">
+        <div class="fact"><strong>4</strong><span>apps in our portfolio</span></div>
+        <div class="fact"><strong>2</strong><span>platforms: iOS and Android</span></div>
+        <div class="fact"><strong>25+</strong><span>languages supported</span></div>
+        <div class="fact"><strong>175+</strong><span>countries reached</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="wrap">
+      <span class="eyebrow">Our commitments</span>
+      <h2 class="title">Quality is not a feature. It's the standard.</h2>
+      <p class="sub">Three principles guide every decision we make, from the first sketch to every update after launch.</p>
+      <div class="principles">
+        <article class="principle">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 3 7v6c0 5 3.8 8.7 9 9 5.2-.3 9-4 9-9V7l-9-5Z"/><path d="m9 12 2 2 4-4"/></svg></span>
+          <h3>Built to last</h3>
+          <p>Thoughtful design, tested on real devices and maintained after launch. We fix issues quickly and keep every app up to date.</p>
+        </article>
+        <article class="principle">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/></svg></span>
+          <h3>Real value, every time</h3>
+          <p>We only build what makes someone's day easier, smarter or more enjoyable. If an app doesn't earn its place on your phone, we don't ship it.</p>
+        </article>
+        <article class="principle">
+          <span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+          <h3>Privacy by design</h3>
+          <p>No intrusive ads, no selling of personal data, transparent pricing. We collect only what an app needs to work.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="apps" class="apps-sec">
+    <div class="wrap">
+      <span class="eyebrow">Portfolio</span>
+      <h2 class="title">Four worlds, one standard.</h2>
+      <p class="sub">Each app solves a specific need for a specific person, and each one is built with the same care.</p>
+      <div class="apps">
+        <a class="app" href="/repasito/">
+          <span class="icon" style="background:linear-gradient(135deg,#4f46e5,#7c6cf6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14Z"/><path d="m9 10 2 2 4-4"/></svg></span>
+          <div><span class="cat">Education</span><h3>Repasito</h3><p>AI-assisted homework checking that helps parents support their children's learning at home.</p><div class="tags"><span>iOS</span><span>Android</span><span>10 languages</span></div></div>
+        </a>
+        <a class="app" href="/thebotanicaleye/">
+          <span class="icon" style="background:linear-gradient(135deg,#0f9488,#22c3a6)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.5 19 2c1 2 2 4.2 2 8 0 5.5-4.8 10-10 10Z"/><path d="M2 21c0-3 1.9-5.4 5.1-6"/></svg></span>
+          <div><span class="cat">Lifestyle</span><h3>The Botanical Eye</h3><p>Identify any plant from a photo and get a personal care plan with timely reminders.</p><div class="tags"><span>iOS</span><span>Android</span><span>26 languages</span></div></div>
+        </a>
+        <a class="app" href="/truckrouteplanner/">
+          <span class="icon" style="background:linear-gradient(135deg,#2f7cf6,#5aa2ff)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17h2m14 0h2M5 17V7h9v10M14 10h4l3 3v4h-2"/><circle cx="7.5" cy="17.5" r="1.5"/><circle cx="17.5" cy="17.5" r="1.5"/></svg></span>
+          <div><span class="cat">Navigation</span><h3>Truck Route Planner</h3><p>Route planning across Europe built for trucks, with the restrictions professional drivers face every day.</p><div class="tags"><span>iOS</span><span>Android</span><span>Web</span></div></div>
+        </a>
+        <a class="app" href="/ludora/">
+          <span class="icon" style="background:linear-gradient(135deg,#7c3aed,#c084fc)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span>
+          <div><span class="cat">Games</span><h3>Ludora</h3><p>A pocket arcade of classic puzzles, including Sudoku, Solitaire and Mahjong, with daily challenges.</p><div class="tags"><span>iOS</span><span>Android</span><span>25 languages</span></div></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section id="process">
+    <div class="wrap">
+      <span class="eyebrow">How we work</span>
+      <h2 class="title">From idea to the app on your phone.</h2>
+      <div class="steps">
+        <div class="step"><h3>Understand</h3><p>We start with a real need and the people who have it.</p></div>
+        <div class="step"><h3>Design</h3><p>Clear, accessible interfaces in light and dark mode.</p></div>
+        <div class="step"><h3>Test</h3><p>Real devices and real-world data before every release.</p></div>
+        <div class="step"><h3>Improve</h3><p>We listen to feedback and keep shipping updates.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" style="padding-top:0">
+    <div class="wrap">
+      <div class="band">
+        <div>
+          <h2>Let's build something worth using.</h2>
+          <p>Partnerships, press or feedback: we read every message.</p>
+        </div>
+        <a class="btn" href="mailto:aissa.b.code@gmail.com">aissa.b.code@gmail.com</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#top" style="font-size:1rem">Chisp<span class="app">apps</span></a>
+    <nav aria-label="Footer"><a href="#apps">Apps</a><a href="#principles">Principles</a><a href="#contact">Contact</a></nav>
+    <span>© 2026 Chispapps · chispapps.com</span>
+  </div>
+</footer>
+</body>
+</html>

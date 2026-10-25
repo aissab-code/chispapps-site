@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Programa de colaboradores · The Botanical Eye</title>
+  <meta name="description" content="Recomienda The Botanical Eye: tus seguidores consiguen 1 mes gratis de Premium y tú ganas el 20 % durante su primer año.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+  <header class="brand">
+    <div class="logo" aria-hidden="true">🌿</div><span>The Botanical Eye · Colaboradores</span>
+    <a class="lang" href="join.html" hreflang="en">English</a>
+  </header>
+
+  <h1>Recomienda The Botanical Eye y gana el 20 %</h1>
+  <p class="lead">The Botanical Eye (El Ojo Botánico) identifica plantas con una foto, revisa su salud y recuerda cuándo regarlas, abonarlas o trasplantarlas. Si tu comunidad cuida plantas, encaja contigo.</p>
+
+  <h2>Cómo funciona</h2>
+  <ol class="steps">
+    <li><div><strong>Recibes tu código personal</strong><br><span class="muted">Por ejemplo, LAURA. Es el mismo en iPhone y en Android.</span></div></li>
+    <li><div><strong>Tus seguidores consiguen 1 mes gratis</strong><br><span class="muted">De Premium, al suscribirse por primera vez con tu código.</span></div></li>
+    <li><div><strong>Tú ganas el 20 % durante su primer año</strong><br><span class="muted">De lo que pagan después del mes gratis, sobre lo que la app ingresa de verdad. Lo ves todo en tu panel privado.</span></div></li>
+  </ol>
+
+  <h2>Solicita tu plaza</h2>
+  <div class="card">
+    <form id="apply" novalidate>
+      <label>Nombre
+        <input name="name" autocomplete="name" required minlength="2" maxlength="100">
+      </label>
+      <label>Email
+        <input name="email" type="email" autocomplete="email" required maxlength="200">
+      </label>
+      <label>Tu perfil
+        <input name="handle" required minlength="2" maxlength="100" placeholder="@tuusuario o enlace">
+      </label>
+      <label>Plataforma principal
+        <select name="platform" required>
+          <option value="instagram">Instagram</option>
+          <option value="tiktok">TikTok</option>
+          <option value="youtube">YouTube</option>
+          <option value="blog">Blog o web</option>
+          <option value="other">Otra</option>
+        </select>
+      </label>
+      <label>Seguidores aproximados
+        <input name="followers" type="number" inputmode="numeric" min="0" step="1">
+      </label>
+      <label>El código que te gustaría <span class="muted">(opcional)</span>
+        <input name="code" maxlength="20" pattern="[A-Za-z0-9]{3,20}" autocapitalize="characters" placeholder="LAURA" style="text-transform:uppercase">
+        <small>De 3 a 20 letras o números, sin espacios. Lo usamos si está libre.</small>
+      </label>
+      <label>Cuéntanos sobre tu comunidad <span class="muted">(opcional)</span>
+        <textarea name="message" maxlength="2000"></textarea>
+      </label>
+      <!-- Bots fill every field; people never see this one. -->
+      <div class="hp" aria-hidden="true"><label>Web <input name="website" tabindex="-1" autocomplete="off"></label></div>
+      <label class="check">
+        <input name="consent" type="checkbox" required>
+        <span>He leído la información sobre protección de datos de abajo y acepto que me contactéis sobre el programa. Acepto las <a href="condiciones.html" target="_blank">condiciones del programa</a>.</span>
+      </label>
+      <button type="submit" id="send">Enviar solicitud</button>
+      <div id="result" class="msg" hidden></div>
+    </form>
+  </div>
+
+  <h2>Protección de datos</h2>
+  <dl class="legal">
+    <dt>Responsable</dt><dd>Aissa Bamogo Redondo (autónoma, España) · aissa.b.code@gmail.com</dd>
+    <dt>Finalidad</dt><dd>Estudiar tu solicitud para el programa de colaboradores y contactarte sobre ella.</dd>
+    <dt>Legitimación</dt><dd>Tu consentimiento, que puedes retirar cuando quieras.</dd>
+    <dt>Destinatarios</dt><dd>No cedemos tus datos. Supabase aloja la base de datos como encargado del tratamiento.</dd>
+    <dt>Conservación</dt><dd>Si la solicitud no sigue adelante, la borramos en un máximo de 12 meses.</dd>
+    <dt>Derechos</dt><dd>Acceso, rectificación, supresión, oposición, limitación y portabilidad escribiendo a aissa.b.code@gmail.com. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</dd>
+  </dl>
+
+  <footer><a href="condiciones.html">Condiciones del programa</a> · <a href="https://chispapps.com/thebotanicaleye/privacidad">Privacidad de la app</a></footer>
+</main>
+
+<script src="config.js"></script>
+<script>
+  const form = document.getElementById('apply');
+  const result = document.getElementById('result');
+  const send = document.getElementById('send');
+
+  function say(text, isError) {
+    result.textContent = text;
+    result.className = 'msg' + (isError ? ' error' : '');
+    result.hidden = false;
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const f = new FormData(form);
+    if (f.get('website')) { say('¡Gracias! Hemos recibido tu solicitud.'); form.reset(); return; }
+    if (!form.checkValidity()) { form.reportValidity(); return; }
+
+    send.disabled = true;
+    try {
+      await window.beRpc('submit_affiliate_application', {
+        p_name: f.get('name'),
+        p_email: f.get('email'),
+        p_handle: f.get('handle'),
+        p_platform: f.get('platform'),
+        p_followers: f.get('followers') ? Number(f.get('followers')) : null,
+        p_message: f.get('message') || null,
+        p_consent: f.get('consent') === 'on',
+        p_code: (f.get('code') || '').trim() || null,
+      });
+      say('¡Gracias! Hemos recibido tu solicitud. Si encaja, en unos días te llegarán por email tu código y tu panel privado.');
+      form.reset();
+    } catch (err) {
+      if (!err.status) say('No hemos podido enviar la solicitud. Inténtalo de nuevo en un momento.', true);
+      else say(/too many/.test(err.message)
+        ? 'Ya hemos recibido varias solicitudes tuyas hoy. Te escribiremos pronto.'
+        : 'Revisa los datos: falta algo o no es válido.', true);
+    } finally {
+      send.disabled = false;
+    }
+  });
+</script>
+</body>
+</html>

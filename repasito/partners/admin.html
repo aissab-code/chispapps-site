@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Friends · Repasito admin</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .row2 { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+    .bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; }
+    .bar label { display: flex; gap: 8px; align-items: center; font-weight: 400; font-size: 14px; }
+    .bar label input { width: auto; }
+    .mono { font-family: ui-monospace, "SFMono-Regular", Consolas, monospace; letter-spacing: .5px; }
+    td.mono, td.nowrap { white-space: nowrap; }
+    td .secondary { padding: 7px 12px; font-size: 13px; }
+    td .danger { background: var(--bad); color: #fff; border: 0; padding: 7px 12px; font-size: 13px; }
+    .pill.active { background: var(--accent-soft); color: var(--ok); }
+    .pill.ended { background: var(--accent-soft); color: var(--muted); }
+    .pill.removed { background: var(--accent-soft); color: var(--bad); }
+    code.block { display: block; padding: 10px 12px; border-radius: 10px; background: var(--accent-soft); overflow-x: auto; }
+  </style>
+</head>
+<body>
+<main>
+  <header class="brand"><div class="logo">R</div><span>Repasito · Admin</span></header>
+
+  <!-- Locked: ask for the admin key. -->
+  <section id="locked">
+    <h1>Friends</h1>
+    <p class="lead">Give friends more pages a week for free. Open this page with your admin key.</p>
+    <div class="card">
+      <form id="unlock" novalidate>
+        <label>Admin key
+          <input id="key" name="key" type="password" autocomplete="off" required minlength="32">
+        </label>
+        <label class="check"><input id="remember" type="checkbox" checked><span>Remember the key on this browser. Only do this on your own devices.</span></label>
+        <button type="submit" id="open">Open</button>
+        <div id="unlock-msg" class="msg error" hidden></div>
+      </form>
+    </div>
+    <h2>No key yet?</h2>
+    <p>In Supabase, open the SQL editor of the Repasito project and run:</p>
+    <code class="block">select admin_new_key();</code>
+    <p class="muted" style="margin-top:12px">The result is your key, shown only once. Running it again makes a new key and switches the old one off.</p>
+  </section>
+
+  <!-- Unlocked. -->
+  <section id="app" hidden>
+    <div class="bar"><h1 style="margin:0">Friends</h1><button type="button" class="secondary" id="lock">Lock</button></div>
+    <p class="lead" style="margin-top:10px">Your friend sends you their Repasito ID from the app: Perfil › Tu ID de Repasito. They get the pages straight away, with nothing to type.</p>
+
+    <h2>Give a friend pages</h2>
+    <div class="card">
+      <form id="grant" novalidate>
+        <div class="row2">
+          <label>Repasito ID
+            <input id="friend-id" name="friend-id" class="mono" required placeholder="3FA8-5F64" autocomplete="off" maxlength="40">
+          </label>
+          <label>Name
+            <input id="friend-name" name="friend-name" required maxlength="60" placeholder="María (cousin)">
+          </label>
+          <label>Pages a week
+            <select id="pages" name="pages">
+              <option value="40">40</option>
+              <option value="100" selected>100</option>
+              <option value="200">200 (same as Plus)</option>
+            </select>
+          </label>
+          <label>For
+            <select id="months" name="months">
+              <option value="1">1 month</option>
+              <option value="3">3 months</option>
+              <option value="6">6 months</option>
+              <option value="12" selected>12 months</option>
+              <option value="">No end</option>
+            </select>
+          </label>
+        </div>
+        <button type="submit" id="give">Give pages</button>
+        <div id="grant-msg" class="msg" hidden></div>
+      </form>
+    </div>
+
+    <div class="bar" style="margin-top:36px">
+      <h2 style="margin:0">Your friends</h2>
+      <label><input type="checkbox" id="show-old"> Show ended and removed</label>
+    </div>
+    <div class="card table-wrap" style="margin-top:12px">
+      <table>
+        <thead><tr><th>Name</th><th>ID</th><th class="num">Pages a week</th><th class="num">Used this week</th><th>Until</th><th>Status</th><th></th></tr></thead>
+        <tbody id="friends"></tbody>
+      </table>
+      <p id="friends-empty" class="muted" hidden style="margin:12px 0 0">No friends yet. Give someone pages above.</p>
+    </div>
+  </section>
+
+  <footer>Private page for the owner of Repasito.</footer>
+</main>
+
+<script>
+  // The anon key is public by design (the app ships it). Every admin function checks the admin
+  // key itself and refuses anything else.
+  const SUPABASE_URL = 'https://jbucdxgdgzescpdukfmw.supabase.co';
+  const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpidWNkeGdkZ3plc2NwZHVrZm13Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2MjYyNDAsImV4cCI6MjA5MDIwMjI0MH0.L17-Q6cUPMRlkFHSxq3bC1uqImmMjvLhsejnRn_NEfI';
+  const STORE = 'repasito-admin-key';
+
+  const $ = (id) => document.getElementById(id);
+  let adminKey = null;
+  let friends = [];
+  let confirming = null;
+
+  async function rpc(name, args) {
+    const res = await fetch(SUPABASE_URL + '/rest/v1/rpc/' + name, {
+      method: 'POST',
+      headers: { apikey: ANON_KEY, Authorization: 'Bearer ' + ANON_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify(args),
+    });
+    const body = await res.json().catch(() => null);
+    if (!res.ok) {
+      const err = new Error((body && body.message) || 'Something went wrong. Try again.');
+      err.status = res.status;
+      throw err;
+    }
+    return body;
+  }
+
+  function say(el, text, isError) {
+    el.textContent = text;
+    el.className = 'msg' + (isError ? ' error' : '');
+    el.hidden = false;
+  }
+
+  const day = (iso) => new Date(iso).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  const until = (iso) => (new Date(iso).getFullYear() >= 2099 ? 'No end' : day(iso));
+
+  function cell(text, cls) {
+    const td = document.createElement('td');
+    if (cls) td.className = cls;
+    td.textContent = text;
+    return td;
+  }
+
+  function render() {
+    const showOld = $('show-old').checked;
+    const shown = friends.filter((f) => showOld || f.status === 'active');
+    $('friends').replaceChildren(...shown.map((f) => {
+      const tr = document.createElement('tr');
+      const pill = document.createElement('span');
+      pill.className = 'pill ' + f.status;
+      pill.textContent = { active: 'Active', ended: 'Ended', removed: 'Removed' }[f.status] || f.status;
+      const status = document.createElement('td');
+      status.append(pill);
+      const action = document.createElement('td');
+      if (f.status === 'active') {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = confirming === f.id ? 'danger' : 'secondary';
+        btn.textContent = confirming === f.id ? 'Confirm' : 'Remove';
+        btn.addEventListener('click', () => remove(f));
+        action.append(btn);
+      }
+      tr.append(cell(f.name), cell(f.friend_id, 'mono'), cell(String(f.weekly_pages), 'num'),
+        cell(f.status === 'active' ? String(f.pages_this_week) : '–', 'num'), cell(until(f.expires_at), 'nowrap'), status, action);
+      return tr;
+    }));
+    $('friends-empty').hidden = shown.length > 0;
+    $('friends-empty').textContent = friends.length ? 'No active friends. Tick "Show ended and removed" to see the others.' : 'No friends yet. Give someone pages above.';
+  }
+
+  async function load() {
+    friends = await rpc('admin_friend_list', { p_key: adminKey });
+    render();
+  }
+
+  async function unlock(key, remember) {
+    adminKey = key;
+    try {
+      await load();
+    } catch (e) {
+      adminKey = null;
+      try { localStorage.removeItem(STORE); } catch {}
+      throw e;
+    }
+    try { if (remember) localStorage.setItem(STORE, key); } catch {}
+    $('locked').hidden = true;
+    $('app').hidden = false;
+  }
+
+  async function remove(f) {
+    if (confirming !== f.id) { confirming = f.id; render(); return; }
+    confirming = null;
+    try {
+      await rpc('admin_friend_remove', { p_key: adminKey, p_grant_id: f.id });
+      say($('grant-msg'), `${f.name} is back to the free 10 pages a week.`);
+      await load();
+    } catch (e) {
+      say($('grant-msg'), e.message, true);
+      render();
+    }
+  }
+
+  $('unlock').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const key = $('key').value.trim();
+    if (key.length < 32) { say($('unlock-msg'), 'That is not an admin key: it has 64 characters.', true); return; }
+    $('open').disabled = true;
+    try {
+      await unlock(key, $('remember').checked);
+      $('key').value = '';
+    } catch (err) {
+      say($('unlock-msg'), err.status === 401 ? 'That key does not work. Make a new one with select admin_new_key();' : err.message, true);
+    } finally {
+      $('open').disabled = false;
+    }
+  });
+
+  $('grant').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const name = $('friend-name').value.trim();
+    const id = $('friend-id').value.trim();
+    if (!id || !name) { say($('grant-msg'), 'Fill in the Repasito ID and a name.', true); return; }
+    const months = $('months').value ? Number($('months').value) : null;
+    $('give').disabled = true;
+    try {
+      const g = await rpc('admin_friend_grant', {
+        p_key: adminKey, p_friend_id: id, p_name: name, p_weekly_pages: Number($('pages').value), p_months: months,
+      });
+      say($('grant-msg'), `${name} (${g.friend_id}) now has ${g.weekly_pages} pages a week` +
+        (months ? ` until ${day(g.expires_at)}.` : ', with no end.'));
+      $('grant').reset();
+      await load();
+    } catch (err) {
+      say($('grant-msg'), err.message, true);
+    } finally {
+      $('give').disabled = false;
+    }
+  });
+
+  $('show-old').addEventListener('change', render);
+  $('lock').addEventListener('click', () => {
+    try { localStorage.removeItem(STORE); } catch {}
+    adminKey = null;
+    friends = [];
+    $('app').hidden = true;
+    $('locked').hidden = false;
+  });
+
+  (async () => {
+    let saved = null;
+    try { saved = localStorage.getItem(STORE); } catch {}
+    if (!saved) return;
+    try { await unlock(saved, true); } catch (e) {
+      say($('unlock-msg'), 'The saved key no longer works. Enter your current admin key.', true);
+    }
+  })();
+</script>
+</body>
+</html>
