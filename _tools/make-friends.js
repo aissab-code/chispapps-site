@@ -130,6 +130,16 @@ const apps = {
 };
 
 const LANGS = ['es', 'en', 'hu'];
+
+// Store pages in the reader's language: App Store by storefront country, Google Play by hl=.
+const APPLE_STOREFRONT = { es: 'es', en: 'us', hu: 'hu' };
+function storeLinks(app, lang) {
+  return {
+    ios: app.ios.replace('https://apps.apple.com/app/', 'https://apps.apple.com/' + APPLE_STOREFRONT[lang] + '/app/'),
+    android: app.android + '&hl=' + lang,
+  };
+}
+
 const LANG_NAMES = { es: 'Español', en: 'English', hu: 'Magyar' };
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
@@ -137,8 +147,8 @@ function page(slug, app, lang) {
   const t = app.t[lang];
   const base = `/${slug}/friends/`;
   const stores = `
-      <a class="store" href="${app.android}">${esc(t.android)}</a>
-      ${app.iosLive ? `<a class="store" href="${app.ios}">${esc(t.ios)}</a>` : `<span class="store off">${esc(t.ios)} · ${esc(t.soon)}</span>`}`;
+      <a class="store" href="${storeLinks(app, lang).android}">${esc(t.android)}</a>
+      ${app.iosLive ? `<a class="store" href="${storeLinks(app, lang).ios}">${esc(t.ios)}</a>` : `<span class="store off">${esc(t.ios)} · ${esc(t.soon)}</span>`}`;
   const step = (n, h, p, extra = '') => `
     <li class="step"><span class="num">${n}</span><div><h2>${esc(h)}</h2><p>${esc(p)}</p>${extra}</div></li>`;
   const phone = `
