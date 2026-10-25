@@ -135,6 +135,11 @@
     <!-- Friends -->
     <section data-panel="friends" hidden>
       <p class="lead">Your friend sends you their ID from the app: Profile › Your ID. They get Premium the next time they open the app, with nothing to type, and a weekly scan allowance.</p>
+    <p class="muted" style="margin:8px 0 0">Instructions to send a friend (how to find and send their ID):
+      <a href="https://chispapps.com/thebotanicaleye/friends/es/" target="_blank">Español</a> ·
+      <a href="https://chispapps.com/thebotanicaleye/friends/en/" target="_blank">English</a> ·
+      <a href="https://chispapps.com/thebotanicaleye/friends/hu/" target="_blank">Magyar</a> ·
+      or <span class="mono">chispapps.com/thebotanicaleye/friends/</span> (picks the phone's language)</p>
       <h2 style="margin-top:0">Give a friend Premium</h2>
       <div class="card">
         <form id="grant" novalidate>
@@ -776,6 +781,14 @@
   });
 
   (async () => {
+
+    try {
+      const m = location.hash.match(/^#ak=(.+)$/);
+      if (m) {
+        localStorage.setItem(STORE, decodeURIComponent(m[1]));
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    } catch {}
     let saved = null;
     try { saved = localStorage.getItem(STORE); } catch {}
     if (!saved) return;

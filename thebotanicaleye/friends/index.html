@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Botanical Eye · Friends</title>
+<meta name="robots" content="noindex">
+<script>
+  (function () {
+    var langs = (navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']);
+    var pick = 'en';
+    for (var i = 0; i < langs.length; i++) {
+      var l = String(langs[i]).slice(0, 2).toLowerCase();
+      if (l === 'es' || l === 'hu' || l === 'en') { pick = l; break; }
+    }
+    location.replace('/thebotanicaleye/friends/' + pick + '/' + location.hash);
+  })();
+</script>
+<style>body{font-family:system-ui,sans-serif;margin:0;padding:40px 18px;background:#f6f8fc;color:#0b1530;text-align:center}a{display:inline-block;margin:6px;padding:10px 16px;border-radius:12px;background:#0b1530;color:#fff;text-decoration:none;font-weight:600}</style>
+</head>
+<body>
+<p>The Botanical Eye</p>
+<a href="/thebotanicaleye/friends/es/" hreflang="es">Español</a>
+<a href="/thebotanicaleye/friends/en/" hreflang="en">English</a>
+<a href="/thebotanicaleye/friends/hu/" hreflang="hu">Magyar</a>
+</body>
+</html>

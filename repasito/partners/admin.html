@@ -50,6 +50,11 @@
   <section id="app" hidden>
     <div class="bar"><h1 style="margin:0">Friends</h1><button type="button" class="secondary" id="lock">Lock</button></div>
     <p class="lead" style="margin-top:10px">Your friend sends you their Repasito ID from the app: Perfil › Tu ID de Repasito. They get the pages straight away, with nothing to type.</p>
+    <p class="muted" style="margin:8px 0 0">Instructions to send a friend (how to find and send their ID):
+      <a href="https://chispapps.com/repasito/friends/es/" target="_blank">Español</a> ·
+      <a href="https://chispapps.com/repasito/friends/en/" target="_blank">English</a> ·
+      <a href="https://chispapps.com/repasito/friends/hu/" target="_blank">Magyar</a> ·
+      or <span class="mono">chispapps.com/repasito/friends/</span> (picks the phone's language)</p>
 
     <h2>Give a friend pages</h2>
     <div class="card">
@@ -248,6 +253,14 @@
   });
 
   (async () => {
+
+    try {
+      const m = location.hash.match(/^#ak=(.+)$/);
+      if (m) {
+        localStorage.setItem(STORE, decodeURIComponent(m[1]));
+        history.replaceState(null, '', location.pathname + location.search);
+      }
+    } catch {}
     let saved = null;
     try { saved = localStorage.getItem(STORE); } catch {}
     if (!saved) return;
