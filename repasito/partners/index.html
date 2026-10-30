@@ -26,10 +26,15 @@
         <button class="secondary" id="copy-code">Copiar código</button>
       </div>
       <p style="margin-top:14px"><strong>1 mes gratis</strong> de Repasito Plus para quien se suscriba por primera vez con él.</p>
-      <h3>Enlace para iPhone</h3>
-      <p class="link"><a id="apple-url" target="_blank" rel="noopener noreferrer"></a></p>
-      <button class="secondary" id="copy-url">Copiar enlace</button>
-      <p class="muted" style="margin-top:12px">Ponlo en tu biografía: abre el canje de Apple con tu código ya escrito. Android, muy pronto.</p>
+      <h3>Tu enlace para la bio</h3>
+      <p class="link"><a id="smart-url" target="_blank" rel="noopener noreferrer"></a></p>
+      <button class="secondary" id="copy-smart">Copiar enlace</button>
+      <p class="muted" style="margin-top:12px">Sirve en cualquier móvil: en iPhone abre el canje de Apple con tu código ya escrito; en Android lleva a Repasito en Google Play. Por ahora, el mes gratis con código funciona en iPhone.</p>
+      <details style="margin-top:12px">
+        <summary class="muted">Enlace directo de Apple</summary>
+        <p class="link"><a id="apple-url" target="_blank" rel="noopener noreferrer"></a></p>
+        <button class="secondary" id="copy-url">Copiar enlace de Apple</button>
+      </details>
     </section>
 
     <h2>Resultados</h2>
@@ -111,6 +116,12 @@
     $('apple-url').textContent = d.apple_redeem_url;
     $('copy-code').onclick = () => copy(d.code, $('copy-code'));
     $('copy-url').onclick = () => copy(d.apple_redeem_url, $('copy-url'));
+    // One link for every phone: /r/ sends iPhones to Apple's redemption sheet and Android
+    // phones to Google Play with the creator in the install referrer.
+    const smart = 'https://chispapps.com/r/?c=' + encodeURIComponent(d.code);
+    $('smart-url').href = smart;
+    $('smart-url').textContent = smart;
+    $('copy-smart').onclick = () => copy(smart, $('copy-smart'));
     $('referred').textContent = d.referred_users;
     $('paying').textContent = d.paying_users;
     $('rate').textContent = Math.round(Number(d.commission_rate) * 100) + ' %';
