@@ -5,7 +5,7 @@ lang: es
 
 # Política de Privacidad — Repasito
 
-**Última actualización:** 14 de octubre de 2026
+**Última actualización:** 30 de octubre de 2026
 
 Esta política explica qué hace Repasito con los datos personales. Repasito es una aplicación
 de corrección de deberes que un **padre, madre o tutor legal** utiliza en casa para apoyar el
@@ -86,6 +86,12 @@ Nuestro backend funciona sobre Supabase. Asociado a tu identificador anónimo gu
   «1 mes gratis» de un influencer—, registramos qué colaborador era, para poder pagarle una
   comisión sobre tu suscripción durante un máximo de 12 meses. El colaborador solo ve
   totales: cuántas personas usaron su código y cuánto ha ganado. Nunca quién eres.
+- **Cómo nos conociste (opcional):** si respondes a «¿Cómo conociste Repasito?», guardamos
+  tu respuesta (por ejemplo, «alguien en redes sociales») y, si lo escribes, el nombre o
+  código de quien te lo recomendó. En Android, si instalaste la app desde el enlace de un
+  colaborador, Google Play nos indica ese enlace (el origen de la instalación) y guardamos
+  qué colaborador era. Sirve para saber qué canales funcionan y para pagar la comisión a
+  quien te lo recomendó. No desbloquea nada y puedes no responder.
 
 **No** guardamos la fotografía de los deberes. **No** guardamos los nombres de tus hijos:
 permanecen en tu teléfono, tal y como se describe arriba.
@@ -135,6 +141,7 @@ Google trata la imagen según sus propias condiciones:
 | Aplicar los límites semanales de páginas y los niveles de suscripción | Interés legítimo en evitar abusos, art. 6.1.f |
 | Conservar tu historial para mostrar el progreso | Ejecución de un contrato, art. 6.1.b |
 | Pagar la comisión al colaborador cuyo código canjeaste | Interés legítimo en gestionar el programa de recomendación, art. 6.1.f |
+| Saber cómo nos conociste y a qué colaborador agradecerlo | Interés legítimo en medir nuestros canales y gestionar el programa de recomendación, art. 6.1.f |
 | Obligaciones fiscales y contables de las compras | Obligación legal, art. 6.1.c |
 
 **No** usamos tus datos para publicidad ni elaboración de perfiles, **no** los usamos para
@@ -146,8 +153,8 @@ entrenar modelos de IA y **no** los vendemos.
 
 - **Supabase, Inc.** — aloja nuestra base de datos y funciones de servidor. <https://supabase.com/privacy>
 - **Google LLC (API Gemini)** — analiza las imágenes de deberes. <https://policies.google.com/privacy>
-- **RevenueCat, Inc.** — registra qué suscripción tienes, asociada a tu identificador
-  anónimo. <https://www.revenuecat.com/privacy>
+- **RevenueCat, Inc.** — registra qué suscripción tienes y, si nos lo dices, cómo nos
+  conociste, asociado a tu identificador anónimo. <https://www.revenuecat.com/privacy>
 - **Apple** (App Store, iPhone) y **Google** (Google Play, Android) — distribuyen la
   aplicación y cobran las suscripciones. Nosotros nunca vemos tus datos de pago.
   <https://www.apple.com/legal/privacy/> · <https://policies.google.com/privacy>

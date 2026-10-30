@@ -5,7 +5,7 @@ lang: en
 
 # Privacy Policy — Repasito
 
-**Last updated:** 14 October 2026
+**Last updated:** 30 October 2026
 
 This policy explains what Repasito does with personal data. Repasito is a homework-checking
 app used at home by a **parent or legal guardian** to support a child's learning.
@@ -84,6 +84,12 @@ Our backend runs on Supabase. Attached to your anonymous identifier we store:
   "1 month free" code — we record which partner it was, so that we can pay them a commission
   on your subscription for up to 12 months. The partner only ever sees totals: how many
   people used their code and what they have earned. Never who you are.
+- **How you heard about us (optional):** if you answer "How did you hear about Repasito?",
+  we store your answer (for example "someone on social media") and, if you type it, the name
+  or code of whoever recommended the app. On Android, if you installed the app from a
+  partner's link, Google Play tells us that link (the install referrer) and we record which
+  partner it was. We use this to learn which channels work and to pay the person who
+  recommended us. It unlocks nothing, and you can skip the question.
 
 We do **not** store the homework photograph itself. We do **not** store your children's
 names — those stay on your phone, as described above.
@@ -131,6 +137,7 @@ Google processes the image under its own terms:
 | Enforcing weekly page limits and subscription tiers | Legitimate interest in preventing abuse, Art. 6(1)(f) |
 | Keeping your scan history so progress can be shown | Performance of a contract, Art. 6(1)(b) |
 | Paying commission to the partner whose code you redeemed | Legitimate interest in running the referral programme, Art. 6(1)(f) |
+| Knowing how you heard about us and which partner to thank | Legitimate interest in measuring our channels and running the referral programme, Art. 6(1)(f) |
 | Tax and accounting records for purchases | Legal obligation, Art. 6(1)(c) |
 
 We do **not** use your data for advertising or profiling, we do **not** use it to train AI
@@ -142,8 +149,8 @@ models, and we do **not** sell it.
 
 - **Supabase, Inc.** — hosts our database and server functions. <https://supabase.com/privacy>
 - **Google LLC (Gemini API)** — analyses homework images. <https://policies.google.com/privacy>
-- **RevenueCat, Inc.** — records which subscription you hold, keyed to your anonymous
-  identifier. <https://www.revenuecat.com/privacy>
+- **RevenueCat, Inc.** — records which subscription you hold and, if you tell us, how you
+  heard about us, keyed to your anonymous identifier. <https://www.revenuecat.com/privacy>
 - **Apple** (App Store, iPhone) and **Google** (Google Play, Android) — distribute the app and
   take payment for subscriptions. We never see your payment details.
   <https://www.apple.com/legal/privacy/> · <https://policies.google.com/privacy>
