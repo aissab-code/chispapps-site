@@ -1,34 +1,86 @@
 <!doctype html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Planificador de ruta camión — Planificador de ruta camión</title>
-<meta name="description" content="Planificador de ruta camión — Planificador de ruta camión">
-<style>
-:root{color-scheme:light dark;--bg:#f6f8fc;--card:#fff;--ink:#0f1b33;--muted:#5b6b86;--line:#dbe3f0;--brand:#1d4fd8;--accent:#f5b800}
-@media (prefers-color-scheme:dark){:root{--bg:#0b1220;--card:#121c30;--ink:#e6edf8;--muted:#9fb0cc;--line:#24324d;--brand:#7aa2ff}}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
-header{background:linear-gradient(135deg,#0f2f86,#1d4fd8);color:#fff;padding:28px 16px 22px;border-bottom:4px solid var(--accent)}
-header .in,main,footer .in{max-width:860px;margin:0 auto}
-header h1{margin:0 0 4px;font-size:26px;line-height:1.25}header p{margin:0;opacity:.85}
-main{padding:8px 16px 32px}section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 20px 12px;margin:16px 0}
-h2{font-size:19px;margin:16px 0 6px}p{margin:8px 0}a{color:var(--brand)}code{font-size:13px}
-.meta{color:var(--muted);font-size:14px;margin:18px 0 0}
-table{width:100%;border-collapse:collapse;font-size:14px;margin:8px 0}th,td{text-align:left;vertical-align:top;padding:8px 6px;border-top:1px solid var(--line)}th{color:var(--muted);font-weight:600}
-.wrap{overflow-x:auto}nav.langs{font-size:14px;line-height:2;margin:14px 0 0}nav.langs a,nav.langs strong{margin-right:10px;white-space:nowrap}
-ul{margin:8px 0;padding-left:22px}li{margin:6px 0}.note{color:var(--muted);font-size:13px}
-footer{color:var(--muted);font-size:14px;padding:0 16px 32px}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>Truck Route Planner: driving times, breaks and tolls for trucks in Europe</title>
+<meta name="description" content="Truck Route Planner turns two addresses into a complete trip plan for heavy vehicles in Europe: breaks, rests, tolls, fuel and national rules.">
+<meta property="og:title" content="Truck Route Planner: driving times, breaks and tolls for trucks in Europe">
+<meta property="og:description" content="Truck Route Planner turns two addresses into a complete trip plan for heavy vehicles in Europe: breaks, rests, tolls, fuel and national rules.">
+<meta property="og:image" content="https://chispapps.com/truckrouteplanner/media/screen.jpg">
+<meta property="og:url" content="https://chispapps.com/truckrouteplanner/">
+<link rel="icon" href="media/icon.jpg">
+<link rel="apple-touch-icon" href="media/icon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+<style>:root { --accent: #1d4fd8; --accent-soft: rgba(29,79,216,.12); }</style>
 </head>
 <body>
-<header><div class="in"><h1>Planificador de ruta camión</h1><p>Aissa Bamogo Redondo</p></div></header>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Chispapps home">Chisp<span class="app">apps</span></a>
+    <nav class="links" aria-label="Page">
+      <a href="#features">Features</a>
+      <a href="#help">Help and legal</a>
+    </nav>
+    <a class="back" href="/#apps">All apps</a>
+  </div>
+</header>
 <main>
-<section><h2>Planificador de ruta camión</h2>
-<p><a href="privacy.html">Política de privacidad</a> · <a href="privacy-en.html">Privacy policy</a></p>
-<p><a href="support.html">Soporte / Support</a></p>
-<p><a href="sources.html">Fuentes oficiales / Official sources</a></p></section>
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="app-id"><img src="media/icon.jpg" alt="" width="64" height="64"><div><span class="cat">Navigation</span><b>Truck Route Planner</b></div></div>
+        <h1>Two addresses in. A complete truck trip plan out.</h1>
+        <p class="lead">Breaks and rests under Regulation (EC) No 561/2006, tolls by country, fuel and total cost, and the national rules on your route, for heavy vehicles across Europe.</p>
+        <div class="stores"><a class="store" href="https://apps.apple.com/app/id6820071243" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.4 12.6c0-2.6 2.1-3.8 2.2-3.9-1.2-1.8-3.1-2-3.7-2-1.6-.2-3.1.9-3.9.9-.8 0-2-.9-3.4-.9-1.7 0-3.3 1-4.2 2.6-1.8 3.1-.5 7.7 1.3 10.2.9 1.2 1.9 2.6 3.2 2.6 1.3-.1 1.8-.8 3.3-.8 1.6 0 2 .8 3.4.8 1.4 0 2.3-1.3 3.1-2.5 1-1.4 1.4-2.8 1.4-2.9-.1 0-2.7-1-2.7-4.1ZM13.9 4.9c.7-.9 1.2-2 1.1-3.2-1 0-2.3.7-3 1.6-.7.8-1.3 2-1.1 3.1 1.1.1 2.3-.6 3-1.5Z"/></svg><span><small>Download on the</small><b>App Store</b></span></a><a class="store" href="https://play.google.com/store/apps/details?id=com.aissaapps.planificador" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#34a853" d="M3.6 2.3 13.4 12l-9.8 9.7c-.4-.2-.6-.7-.6-1.2V3.5c0-.5.2-1 .6-1.2Z"/><path fill="#fbbc04" d="m16.8 15.4-3.4-3.4 3.4-3.4 3.8 2.2c1.1.6 1.1 1.8 0 2.4Z"/><path fill="#ea4335" d="M3.6 21.7 13.4 12l3.4 3.4L5 22.1c-.5.3-1 .1-1.4-.4Z"/><path fill="#4285f4" d="M3.6 2.3c.4-.5.9-.7 1.4-.4l11.8 6.7-3.4 3.4Z"/></svg><span><small>Get it on</small><b>Google Play</b></span></a></div>
+        <p class="caption" style="text-align:left">In the stores as “Planificador de ruta camión”.</p>
+        <div class="chips"><span>Free</span><span>No account</span><span>No ads</span><span>24 EU languages</span></div>
+      </div>
+      <div><div class="phone shot"><img src="media/screen.jpg" alt="Truck Route Planner trip plan with breaks, tolls and costs" width="540" loading="eager"></div><p class="caption">Shown in Spanish. The app follows your phone's language.</p></div>
+    </div>
+  </section>
+  <section id="features" class="feat-sec">
+    <div class="wrap">
+      <span class="eyebrow">Features</span>
+      <h2 class="title">Built for the rules professional drivers work under.</h2>
+      <p class="sub">Plan the whole trip before the engine starts.</p>
+      <div class="features">
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><h3>Driving times and breaks</h3><p>45-minute breaks and daily rests under Regulation (EC) No 561/2006, including split breaks and reduced daily rests.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg></span><h3>Stop plan</h3><p>The time and kilometre of every mandatory break and rest, for one or two drivers.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="8" r="6"/><path d="M18.1 10.4A6 6 0 1 1 10.4 18.1"/><path d="M7 6h1v4"/></svg></span><h3>Tolls, fuel and cost</h3><p>Estimated tolls by country from weight, axles and EURO class, plus fuel and total cost per kilometre.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v6c0 5 3.8 8.7 9 9 5.2-.3 9-4 9-9V7l-9-5Z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>National rules</h3><p>Driving bans, low-emission zones and winter equipment for every country on the route.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"/><path d="M9 3v15M15 6v15"/></svg></span><h3>Map and alerts</h3><p>Route map with the stops, and a reminder on your phone before each mandatory break.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg></span><h3>Report and GPX</h3><p>A text report of the plan and GPX export for your navigation device.</p></article>
+      </div>
+    </div>
+  </section>
+  <section style="padding-bottom:0">
+    <div class="wrap"><p class="note" style="margin:0">Results are planning estimates and are not legally binding. Always check current traffic restrictions, toll rates and vehicle limits, and your actual tachograph records. This is not a government app; see the official sources we use.</p></div>
+  </section>
+  <section id="help">
+    <div class="wrap">
+      <span class="eyebrow">Help and legal</span>
+      <h2 class="title">Questions, privacy and your data.</h2>
+      <div class="legal">
+        <a href="support.html"><b>Help</b><span>Soporte / Support</span></a>
+        <a href="privacy-en.html"><b>Privacy policy</b><span>English</span></a>
+        <a href="privacy.html"><b>Política de privacidad</b><span>Español and 22 more languages</span></a>
+        <a href="sources.html"><b>Official sources</b><span>Fuentes oficiales</span></a>
+      </div>
+      <p class="contact">Anything else? Write to <a href="mailto:aissa.b.code@gmail.com">aissa.b.code@gmail.com</a>. We read every message.</p>
+    </div>
+  </section>
 </main>
-<footer><div class="in">Planificador de ruta camión · Aissa Bamogo Redondo · <a href="mailto:aissa.b.code@gmail.com">aissa.b.code@gmail.com</a> · <a href="privacy.html">Privacidad / Privacy</a> · <a href="support.html">Soporte / Support</a> · <a href="sources.html">Fuentes oficiales / Official sources</a></div></footer>
+<footer>
+  <div class="wrap">
+    <a class="brand" href="/" style="font-size:1rem">Chisp<span class="app">apps</span></a>
+    <nav aria-label="Other apps"><a href="/repasito/">Repasito</a><a href="/thebotanicaleye/">The Botanical Eye</a><a href="/ludora/">Ludora</a></nav>
+    <span>© 2026 Chispapps · chispapps.com</span>
+  </div>
+</footer>
 </body>
 </html>
