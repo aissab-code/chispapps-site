@@ -51,7 +51,7 @@ const APPS = [
     ios: 'https://apps.apple.com/app/id6812275331',
     android: 'https://play.google.com/store/apps/details?id=com.repasito.homework',
     chips: ['Free to start', 'No sign-up', 'No ads', '8 languages'],
-    media: { video: 'media/repasito-promo-en.mp4', poster: 'media/repasito-promo-poster.jpg', label: 'Repasito promo video' },
+    media: { video: 'media/repasito-promo-en.mp4', poster: 'media/repasito-promo-poster.jpg', label: 'Repasito promo video', wide: true },
     featTitle: 'Help with homework, without the guesswork.',
     featSub: 'From a photo of the page to an explanation your child understands.',
     features: [
@@ -180,6 +180,9 @@ function store(kind, url) {
 
 function media(a) {
   const m = a.media;
+  if (m.video && m.wide) {
+    return `<div><div class="screen"><video controls playsinline preload="metadata" poster="${m.poster}" aria-label="${esc(m.label)}"><source src="${m.video}" type="video/mp4"></video></div><p class="caption">Watch the short tour (with sound)</p></div>`;
+  }
   if (m.video) {
     return `<div><div class="phone"><video controls playsinline preload="metadata" poster="${m.poster}" aria-label="${esc(m.label)}"><source src="${m.video}" type="video/mp4"></video></div><p class="caption">Watch the short tour (with sound)</p></div>`;
   }
@@ -236,7 +239,7 @@ function page(a) {
 </header>
 <main>
   <section class="hero">
-    <div class="wrap">
+    <div class="wrap${a.media.wide ? ' wide' : ''}">
       <div>
         <div class="app-id"><img src="media/icon.jpg" alt="" width="64" height="64"><div><span class="cat">${esc(a.category)}</span><b>${esc(a.name)}</b></div></div>
         <h1>${esc(a.headline)}</h1>
