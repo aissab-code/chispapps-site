@@ -51,7 +51,7 @@ const APPS = [
     ios: 'https://apps.apple.com/app/id6812275331',
     android: 'https://play.google.com/store/apps/details?id=com.repasito.homework',
     chips: ['Free to start', 'No sign-up', 'No ads', '8 languages'],
-    media: { video: 'media/repasito-promo-en.mp4', poster: 'media/repasito-promo-poster.jpg', label: 'Repasito promo video', wide: true },
+    media: { video: 'media/repasito-promo-en.mp4', poster: 'media/repasito-promo-poster.jpg', label: 'Repasito promo video' },
     featTitle: 'Help with homework, without the guesswork.',
     featSub: 'From a photo of the page to an explanation your child understands.',
     features: [
