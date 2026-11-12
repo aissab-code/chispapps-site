@@ -11,6 +11,7 @@ Public website of Chispapps (Aissa Bamogo Redondo, trading as Aissa Apps), serve
 | `/thebotanicaleye/partners/` | The Botanical Eye partner programme and admin |
 | `/truckrouteplanner/` | Truck Route Planner landing page, privacy (24 languages), support and sources |
 | `/ludora/` | Ludora landing page, legal and support pages |
+| `/landfall/` | Landfall landing page (hand-written, not generated); `/landfall/play/` is the game itself, a Godot web export copied from `Colonize/build/web` (see `Colonize/CLAUDE.md`). Not linked from the home page |
 
 Moved here on 25 Oct 2026 from the separate `aissab-code/*-legal` and `*-partners` repos, which now only redirect.
 
