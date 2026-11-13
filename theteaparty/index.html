@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<title>The Tea Party: a strategy game of the age of sail, free in your browser</title>
+<meta name="description" content="Cross the ocean, plant colonies, trade with the old world and win independence. The Tea Party: Break with the Crown is an original turn-based strategy game you can play free in your browser.">
+<meta property="og:title" content="The Tea Party: Break with the Crown">
+<meta property="og:description" content="Cross the ocean, plant colonies, trade with the old world and win independence. Free in your browser, no account.">
+<meta property="og:image" content="https://chispapps.com/theteaparty/media/world.jpg">
+<meta property="og:url" content="https://chispapps.com/theteaparty/">
+<link rel="icon" href="media/icon.png">
+<link rel="apple-touch-icon" href="media/icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="/assets/app.css">
+<style>
+:root { --accent: #b7791f; --accent-soft: rgba(183,121,31,.14); }
+.screen img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; background: #12171f; }
+.play { background: var(--accent); min-width: 220px; padding: 12px 20px 12px 16px; }
+.play b { font-size: 1.1rem; }
+.shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 28px; }
+.shots figure { margin: 0; }
+.shots img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; border: 1px solid var(--line); box-shadow: var(--shadow); }
+.shots figcaption { color: var(--faint); font-size: .8rem; margin-top: 8px; text-align: center; }
+.keys { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 28px; margin: 24px 0 0; padding: 0; list-style: none; max-width: 760px; }
+.keys li { display: flex; gap: 12px; align-items: baseline; color: var(--slate); font-size: .95rem; }
+.keys kbd { flex: none; min-width: 92px; font: 600 .82rem/1.2 ui-monospace, Consolas, monospace; color: var(--navy); background: var(--mist); border: 1px solid var(--line); border-radius: 7px; padding: 4px 8px; text-align: center; }
+.note { color: var(--slate); max-width: 64ch; }
+@media (max-width: 760px) { .shots { grid-template-columns: 1fr; } .keys { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="/" aria-label="Chispapps home">Chisp<span class="app">apps</span></a>
+    <nav class="links" aria-label="Page">
+      <a href="#features">The game</a>
+      <a href="#play">How to play</a>
+      <a href="#help">Help and privacy</a>
+    </nav>
+    <a class="back" href="/#apps">All apps</a>
+  </div>
+</header>
+<main>
+  <section class="hero">
+    <div class="wrap wide">
+      <div>
+        <div class="app-id"><img src="media/icon.png" alt="" width="64" height="64"><div><span class="cat">Games · Early version</span><b>The Tea Party</b></div></div>
+        <h1>Cross the ocean. Found a new nation.</h1>
+        <p class="lead"><b>The Tea Party: Break with the Crown</b> is an original turn-based strategy game of the age of sail. Plant colonies, put every colonist to work, trade with the old world, deal with rival powers and native nations, and in the end defy your King.</p>
+        <div class="stores"><a class="store play" href="play/"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5.2v13.6c0 .8.9 1.3 1.6.8l10.2-6.8c.6-.4.6-1.2 0-1.6L9.6 4.4C8.900 3.900 8 4.400 8 5.200Z"/></svg><span><small>Free, in your browser</small><b>Play The Tea Party</b></span></a></div>
+        <div class="chips"><span>Free</span><span>No account</span><span>No ads</span><span>Saves in your browser</span><span>Best with keyboard and mouse</span></div>
+      </div>
+      <div><div class="screen"><img src="media/world.jpg" alt="A walled colony on the coast with ships in its harbour" width="1440" height="810" loading="eager"></div><p class="caption">Jamestown in 1770, on the eve of revolution.</p></div>
+    </div>
+  </section>
+  <section id="features" class="feat-sec">
+    <div class="wrap">
+      <span class="eyebrow">The game</span>
+      <h2 class="title">From one ship to a free country.</h2>
+      <p class="sub">A full campaign from 1492, or a short one that starts in 1770 with four grown colonies ready to declare independence.</p>
+      <div class="features">
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l2 4h14l2-4Z"/><path d="M12 3v14M12 5l6 9H12M12 7l-5 7h5"/></svg></span><h3>Five nations</h3><p>Sail for England, France, Spain, the Netherlands or Hungary. Each has its own advantage, home port and way of building.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V10l7-6 7 6v11"/><path d="M10 21v-6h4v6"/></svg></span><h3>Colonies run person by person</h3><p>Every colonist has a trade. Put farmers on fields and smiths in the forge, and see exactly what each will make next turn.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span><h3>Trade across the Atlantic</h3><p>Limited holds, crossings that take turns, prices that move with what you sell, taxes that rise, and trade routes that run themselves.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="10" cy="7" r="4"/><path d="M21 20v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg></span><h3>Neighbours with their own minds</h3><p>Eight native nations and three rival powers trade, make demands, ally, and go to war by land and by sea.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.300 21a1.940 1.940 0 0 0 3.400 0"/></svg></span><h3>Independence</h3><p>Ring the liberty bells, seat a Continental Congress, declare, and hold out against the King's expeditionary force.</p></article>
+        <article class="feature"><span class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2 3 7v6c0 5 3.800 8.700 9 9 5.200-.300 9-4 9-9V7l-9-5Z"/><path d="m9 12 2 2 4-4"/></svg></span><h3>Nothing to install, nothing to sign</h3><p>It runs in the page. No account, no ads, no purchases. Your saved games stay in your browser.</p></article>
+      </div>
+      <div class="shots">
+        <figure><img src="media/colony.jpg" alt="The colony screen with workers, buildings and the warehouse" width="1440" height="810" loading="lazy"><figcaption>Inside a colony.</figcaption></figure>
+        <figure><img src="media/port.jpg" alt="The harbour of Bristol with a merchant ship at the quay" width="1440" height="810" loading="lazy"><figcaption>The home port.</figcaption></figure>
+        <figure><img src="media/fiume.jpg" alt="The harbour of Fiume with a caravel under a green flag" width="1440" height="810" loading="lazy"><figcaption>Fiume, home port of Hungary.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+  <section id="play">
+    <div class="wrap">
+      <span class="eyebrow">How to play</span>
+      <h2 class="title">A guide walks you through the first voyage.</h2>
+      <p class="note">Choose <b>New expedition</b>, pick a Crown and leave "Guide me through the first voyage" ticked. You need a computer with a recent browser (Chrome, Edge, Firefox or Safari), a keyboard and a mouse. The first load is about 40 MB.</p>
+      <ul class="keys">
+        <li><kbd>Right-click</kbd><span>Send the selected unit to a square</span></li>
+        <li><kbd>Enter</kbd><span>End the turn</span></li>
+        <li><kbd>B</kbd><span>Found a colony</span></li>
+        <li><kbd>O</kbd><span>Open the colony</span></li>
+        <li><kbd>U</kbd><span>Sail to Europe</span></li>
+        <li><kbd>F2 F3 F4 F6</kbd><span>Europe, colonies, Congress, diplomacy</span></li>
+        <li><kbd>F5 / F9</kbd><span>Quick save and quick load</span></li>
+        <li><kbd>F1</kbd><span>Every key and rule in the game</span></li>
+      </ul>
+      <p class="note" style="margin-top:24px">This is an early version. If something is confusing, unfair or broken, we would like to hear about it.</p>
+    </div>
+  </section>
+  <section id="help" class="feat-sec">
+    <div class="wrap">
+      <span class="eyebrow">Help and privacy</span>
+      <h2 class="title">Your game stays on your device.</h2>
+      <p class="note">The Tea Party has no account, no ads and no analytics. The game sends nothing anywhere: saved games and settings are kept by your browser on your own device, and clearing this site's data deletes them. This page loads its typeface from Google Fonts, as the rest of chispapps.com does.</p>
+      <div class="legal">
+        <a href="play/"><b>Play The Tea Party</b><span>In your browser</span></a>
+        <a href="licences.txt"><b>Licences</b><span>Godot Engine, Fraunces and Space Grotesk typefaces</span></a>
+      </div>
+      <p class="contact">Questions or bugs? Write to <a href="mailto:aissa.b.code@gmail.com">aissa.b.code@gmail.com</a>. We read every message.</p>
+      <p class="note" style="font-size:.85rem">The Tea Party is an original game. Its code, models, maps, sound and text were made for it. Built with Godot Engine.</p>
+    </div>
+  </section>
+</main>
+<footer>
+  <div class="wrap">
+    <a class="brand" href="/" style="font-size:1rem">Chisp<span class="app">apps</span></a>
+    <nav aria-label="Other apps"><a href="/repasito/">Repasito</a><a href="/thebotanicaleye/">The Botanical Eye</a><a href="/truckrouteplanner/">Truck Route Planner</a><a href="/ludora/">Ludora</a></nav>
+    <span>© 2026 Chispapps · chispapps.com</span>
+  </div>
+</footer>
+</body>
+</html>

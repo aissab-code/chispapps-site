@@ -1,4 +1,4 @@
-LICENCES FOR LANDFALL (browser version at chispapps.com/landfall/play/)
+LICENCES FOR THE TEA PARTY: BREAK WITH THE CROWN (browser version at chispapps.com/theteaparty/play/)
 
 1. Godot Engine 4.7.2 (the engine the game runs on) - MIT licence
 
@@ -123,6 +123,6 @@ Copyright 2020 The Space Grotesk Project Authors (https://github.com/floriankars
 This Font Software is licensed under the SIL Open Font License, Version 1.1, the same licence as Fraunces.
 Its full text is printed in section 2 above and applies to Space Grotesk word for word.
 
-4. Landfall itself
+4. The Tea Party itself
 
-Code, models, maps, sound and text of Landfall: (c) 2026 Chispapps. All rights reserved.
+Code, models, maps, sound and text of The Tea Party: (c) 2026 Chispapps. All rights reserved.
