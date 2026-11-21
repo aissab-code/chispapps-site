@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-page="join">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow">
+<title>Join a group · SplitFinito</title>
+<meta name="description" content="You're invited to a SplitFinito group. Split trip and household costs with friends: free, no account, no ads.">
+<meta name="theme-color" content="#FF6B2C">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="SplitFinito">
+<meta property="og:title" content="Join my SplitFinito group">
+<meta property="og:description" content="Split trip and household costs with friends. Free, no account, no ads.">
+<meta property="og:url" content="https://chispapps.com/splitfinito/join/">
+<meta property="og:image" content="https://chispapps.com/splitfinito/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="SplitFinito logo: a coin split in two halves">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FF6B2C'/%3E%3Cpath d='M27.2 28.5A31 31 0 0 1 78 64.1Z' fill='%23FFF6EC'/%3E%3Cpath d='M22 35.9A31 31 0 0 0 72.8 71.5Z' fill='%23FFF6EC'/%3E%3C/svg%3E">
+<script src="/splitfinito/assets/sf-landing.js"></script>
+<style>
+:root {
+  --bg: #FFF6EC; --surface: #FFFFFF; --sunken: #F5E9DC; --tint: #FFE8D4;
+  --text: #1F1A17; --text2: #6B5F57; --accent: #FF6B2C; --on-accent: #1F1A17;
+  --accent-text: #B8400A; --outline: #E8DCCF; --outline-strong: #8A7D72;
+  --warning-tint: #FFF1CC; --warning-text: #8A5A00; --positive: #0B6B4F;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16110E; --surface: #211A16; --sunken: #0F0B09; --tint: #3A2A20;
+    --text: #FFF6EC; --text2: #B8A99C; --accent: #FF7A3D; --on-accent: #16110E;
+    --accent-text: #FF8F5A; --outline: #3D332C; --outline-strong: #7D6F64;
+    --warning-tint: #3A2E12; --warning-text: #FFC84A; --positive: #4ED1A1;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; background: var(--bg); color: var(--text);
+  font: 17px/1.5 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  display: flex; flex-direction: column; align-items: center;
+  padding: max(24px, env(safe-area-inset-top)) 16px max(24px, env(safe-area-inset-bottom));
+}
+main { width: 100%; max-width: 440px; }
+.brand { display: flex; align-items: center; gap: 12px; margin: 8px 0 28px; }
+.brand svg { width: 52px; height: 52px; flex: none; }
+.wordmark { font-size: 26px; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1; }
+.wordmark span { color: var(--accent-text); }
+.tagline { color: var(--text2); font-size: 15px; }
+h1 { font-size: 30px; line-height: 1.2; margin: 0 0 12px; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+h1 .group-name { color: var(--accent-text); }
+h2 { font-size: 19px; margin: 0 0 6px; }
+p { margin: 0 0 14px; }
+.lead { color: var(--text2); }
+.notice { background: var(--warning-tint); color: var(--warning-text); border-radius: 14px; padding: 12px 14px; font-weight: 600; }
+.seat { background: var(--tint); border-radius: 14px; padding: 10px 14px; }
+.actions { margin: 22px 0 8px; }
+.btn {
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  width: 100%; min-height: 56px; padding: 12px 18px; border-radius: 18px; border: 0;
+  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer; text-align: center;
+}
+.btn:focus-visible, a:focus-visible { outline: 3px solid var(--accent-text); outline-offset: 3px; }
+.primary { background: var(--accent); color: var(--on-accent); font-size: 19px; box-shadow: 0 6px 18px rgba(255, 107, 44, 0.28); }
+.primary:active { transform: translateY(1px); }
+.secondary { background: var(--surface); color: var(--text); border: 1.5px solid var(--outline-strong); margin-top: 12px; }
+.hint { color: var(--text2); font-size: 15px; margin-top: 12px; }
+.small-link { display: inline-block; margin-top: 10px; color: var(--accent-text); font-size: 15px; }
+.install { background: var(--surface); border: 1px solid var(--outline); border-radius: 22px; padding: 18px; margin: 24px 0 16px; }
+.stores { display: grid; gap: 10px; margin-top: 12px; }
+.store { background: var(--text); color: var(--bg); min-height: 58px; }
+.store[aria-disabled="true"] { background: var(--sunken); color: var(--text2); cursor: default; }
+.store-name { font-size: 18px; line-height: 1.2; }
+.store-sub { font-size: 13px; font-weight: 500; opacity: 0.85; }
+.privacy { display: flex; gap: 10px; align-items: flex-start; color: var(--text2); font-size: 14px; }
+.privacy svg { flex: none; width: 18px; height: 18px; margin-top: 2px; }
+footer { width: 100%; max-width: 440px; margin-top: auto; padding-top: 24px; color: var(--text2); font-size: 13px; text-align: center; }
+footer a { color: var(--accent-text); }
+footer nav { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; margin-top: 6px; }
+[hidden] { display: none !important; }
+</style>
+</head>
+<body>
+<main>
+  <header class="brand">
+    <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+      <rect width="100" height="100" rx="22" fill="#FF6B2C"/>
+      <path d="M27.2 28.5A31 31 0 0 1 78 64.1Z" fill="#FFF6EC"/>
+      <path d="M22 35.9A31 31 0 0 0 72.8 71.5Z" fill="#FFF6EC"/>
+      <path d="M71 15.5Q71 22 77.5 22Q71 22 71 28.5Q71 22 64.5 22Q71 22 71 15.5Z" fill="#1F1A17"/>
+    </svg>
+    <div>
+      <div class="wordmark">Split<span>Finito</span></div>
+      <div class="tagline" data-i18n="tagline">Split it. Finito.</div>
+    </div>
+  </header>
+
+  <h1 id="title">Join a group on SplitFinito</h1>
+  <p id="lead" class="lead" data-i18n="lead">You’re invited to share expenses in this group. Open the invite in SplitFinito to see every cost and add your own.</p>
+  <p id="seat" class="seat" data-i18n="seat" hidden>This link keeps a seat for you in the group.</p>
+  <p id="invalid" class="notice" data-i18n="invalid" role="alert" hidden>This invite link is incomplete. Ask whoever sent it for a new one.</p>
+
+  <div id="open-block" class="actions" hidden>
+    <a id="open" class="btn primary" href="splitfinito://" data-i18n="open">Open in SplitFinito</a>
+    <p id="hint" class="hint" data-i18n="hint" role="status" hidden>Nothing happened? Install SplitFinito first, then come back and tap the button again.</p>
+    <a id="open-plain" class="small-link" href="splitfinito://" data-i18n="openPlain" hidden>Button not working? Try this link</a>
+  </div>
+
+  <section class="install" aria-labelledby="install-title">
+    <h2 id="install-title" data-i18n="installTitle">Don’t have the app yet?</h2>
+    <p data-i18n="installSteps">Install SplitFinito: it’s free and needs no account. Then tap the invite link again, or copy it and paste it in the app.</p>
+    <div class="stores">
+      <a id="store-ios" class="btn store" aria-disabled="true">
+        <span class="store-name">App Store</span>
+        <span id="store-ios-sub" class="store-sub" data-i18n="appStoreSub">for iPhone</span>
+      </a>
+      <a id="store-android" class="btn store" href="https://play.google.com/store/apps/details?id=com.aissaapps.splitfinito">
+        <span class="store-name">Google Play</span>
+        <span class="store-sub" data-i18n="googlePlaySub">for Android</span>
+      </a>
+    </div>
+    <button id="copy" class="btn secondary" type="button" data-i18n="copy" hidden>Copy invite link</button>
+    <p id="copy-status" class="hint" role="status" aria-live="polite"></p>
+    <p id="desktop" class="hint" data-i18n="desktop" hidden>On a computer? Open this link on your phone instead.</p>
+  </section>
+
+  <p class="privacy">
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M12 2a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-1V7a5 5 0 0 0-5-5Zm-3 8V7a3 3 0 1 1 6 0v3H9Z"/></svg>
+    <span data-i18n="privacy">Your invite code never leaves this page: it stays in your browser and is never sent to any server.</span>
+  </p>
+</main>
+<footer>
+  <div data-i18n="perks">Free · No account · No limits · No ads</div>
+  <nav>
+    <a id="link-privacy" href="/splitfinito/privacy">Privacy</a>
+    <a id="link-terms" href="/splitfinito/terms">Terms</a>
+    <a id="link-help" href="/splitfinito/support">Help</a>
+    <span>Chispapps</span>
+  </nav>
+</footer>
+</body>
+</html>

@@ -1,0 +1,32 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["3Q72J6XQYL.com.aissaapps.splitfinito"],
+        "components": [
+          {
+            "/": "/splitfinito/join",
+            "comment": "Invite link without trailing slash. The group key lives in the fragment and never reaches any server."
+          },
+          {
+            "/": "/splitfinito/join/*",
+            "comment": "Invite link, canonical form https://chispapps.com/splitfinito/join/#1.g.<gid>.<K>.<S>.<name>"
+          },
+          {
+            "/": "/splitfinito/i",
+            "comment": "Events bundle without trailing slash."
+          },
+          {
+            "/": "/splitfinito/i/*",
+            "comment": "Events bundle, canonical form https://chispapps.com/splitfinito/i/#1.e.<gid>.<nonce>.<cipher>"
+          },
+          {
+            "/": "/splitfinito/*",
+            "exclude": true,
+            "comment": "Landing, privacy, terms, support and changelog pages always open in the browser."
+          }
+        ]
+      }
+    ]
+  }
+}

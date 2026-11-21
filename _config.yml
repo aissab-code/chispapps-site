@@ -5,6 +5,8 @@ lang: en
 url: https://chispapps.com
 exclude:
   - README.md
+include:
+  - .well-known
 defaults:
   - scope:
       path: "repasito"
