@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.aissaapps.splitfinito",
+      "sha256_cert_fingerprints": [
+        "BB:80:A4:E6:A9:8E:5C:13:18:88:5B:2A:98:6A:80:35:F1:61:18:17:CB:A9:2B:5B:CA:C7:02:CD:71:01:18:83",
+        "4E:69:B6:CB:11:F4:D5:22:86:C4:FD:5D:66:F3:EA:B9:0C:BF:F8:CC:AE:29:5D:CA:08:B8:52:06:74:B2:79:49"
+      ]
+    }
+  }
+]
