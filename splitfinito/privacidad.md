@@ -148,6 +148,7 @@ sus propias condiciones.
 ## 8. Lo que no hacemos
 
 - No creamos cuentas ni te pedimos correo, teléfono o contraseña.
+- Si nos escribes (Contacto o Denunciar en la app abren tu propia app de correo), recibimos tu dirección de correo y tu mensaje y solo los usamos para responderte. No te añadimos a ninguna lista.
 - No leemos tus contactos: las invitaciones son enlaces y códigos QR.
 - No usamos tu ubicación ni tu micrófono.
 - No mostramos anuncios, no usamos el identificador publicitario ni incluimos herramientas de analítica,

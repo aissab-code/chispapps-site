@@ -149,6 +149,7 @@ messaggio secondo le proprie condizioni.
 ## 8. Cosa non facciamo
 
 - Non creiamo account e non ti chiediamo email, numero di telefono o password.
+- Se ci scrivi (Contatti o Segnala nell'app aprono la tua app di posta), riceviamo il tuo indirizzo email e il tuo messaggio e li usiamo solo per risponderti. Non ti aggiungiamo a nessuna lista.
 - Non leggiamo i tuoi contatti: gli inviti sono link e codici QR.
 - Non usiamo la tua posizione né il microfono.
 - Non mostriamo pubblicità, non usiamo l'ID pubblicitario e non includiamo strumenti di statistica,

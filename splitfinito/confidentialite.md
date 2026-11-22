@@ -158,6 +158,7 @@ celle-ci traite le message selon ses propres conditions.
 ## 8. Ce que nous ne faisons pas
 
 - Nous ne créons pas de comptes et ne demandons ni e-mail, ni numéro de téléphone, ni mot de passe.
+- Si vous nous écrivez (Contact ou Signaler dans l'appli ouvrent votre propre appli de messagerie), nous recevons votre adresse e-mail et votre message et ne les utilisons que pour vous répondre. Nous ne vous ajoutons à aucune liste.
 - Nous ne lisons pas vos contacts : les invitations sont des liens et des QR codes.
 - Nous n'utilisons ni votre position ni votre micro.
 - Nous n'affichons pas de publicité, n'utilisons pas d'identifiant publicitaire et n'intégrons aucun

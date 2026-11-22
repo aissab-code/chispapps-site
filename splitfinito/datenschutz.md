@@ -151,6 +151,7 @@ verarbeitet diese App die Nachricht nach ihren eigenen Bedingungen.
 ## 8. Was wir nicht tun
 
 - Wir legen keine Konten an und fragen weder nach E-Mail-Adresse noch nach Telefonnummer oder Passwort.
+- Wenn du uns schreibst (Kontakt oder Melden in der App öffnen deine eigene Mail-App), erhalten wir deine E-Mail-Adresse und deine Nachricht und verwenden sie nur, um dir zu antworten. Wir setzen dich auf keine Liste.
 - Wir lesen keine Kontakte: Einladungen sind Links und QR-Codes.
 - Wir nutzen weder deinen Standort noch dein Mikrofon.
 - Wir zeigen keine Werbung, nutzen keine Werbe-ID und binden keine Analyse-, Absturzbericht- oder

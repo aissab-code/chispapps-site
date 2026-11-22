@@ -149,6 +149,7 @@ segundo as suas próprias condições.
 ## 8. O que não fazemos
 
 - Não criamos contas nem te pedimos e-mail, número de telefone ou palavra-passe.
+- Se nos escrever (Contacto ou Denunciar na app abrem a sua própria app de email), recebemos o seu endereço de email e a sua mensagem e só os usamos para responder. Não o adicionamos a nenhuma lista.
 - Não lemos os teus contactos: os convites são links e códigos QR.
 - Não usamos a tua localização nem o teu microfone.
 - Não mostramos anúncios, não usamos o identificador de publicidade e não incluímos ferramentas de

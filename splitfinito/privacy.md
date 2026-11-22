@@ -140,6 +140,7 @@ message under its own terms.
 ## 8. What we do not do
 
 - We do not create accounts or ask for your email address, phone number or password.
+- If you write to us (Contact or Report in the app opens your own email app), we receive your email address and your message and use them only to reply. We do not add you to any list.
 - We do not read your contacts: invitations are links and QR codes.
 - We do not use your location or your microphone.
 - We do not show ads, use an advertising identifier, or include analytics, crash-reporting or tracking
